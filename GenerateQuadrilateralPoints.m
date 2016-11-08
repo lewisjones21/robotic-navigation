@@ -17,9 +17,9 @@ inc2 = axis2 / (density2 - 1);
 
 yPosition = corner;
 
-for y=0:density2-1
+for y = 0:density2 - 1
     position = yPosition;
-    for x=0:density1-1
+    for x = 0:density1 - 1
         points(:,y * density1 + x + 1) = position;
         position = position + inc1;
     end
