@@ -16,14 +16,20 @@ function [n,V,p] = affine_fit(X)
     %Author: Adrien Leygue
     %Date: August 30 2013
     
+    %Lewis added code here to make row vs. column point storage consistent
+    X = X';
+    
     %the mean of the samples belongs to the plane
     p = mean(X,1);
     
     %The samples are reduced:
     R = bsxfun(@minus,X,p);
-    %Computation of the principal directions if the samples cloud
+    %Computation of the principal directions of the samples cloud
     [V,D] = eig(R'*R);
     %Extract the output from the eigenvectors
     n = V(:,1);
     V = V(:,2:end);
+    
+    %Lewis added code here to make row vs. column point storage consistent
+    p = p';
 end

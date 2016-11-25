@@ -1,10 +1,12 @@
-function [polygons] = FindPolygons(points)
+function [polygons, coplanarPoints] = FindPolygons(points)
 
 polygons = [];
+coplanarPoints = [];
 
 attempts = 1;
 searchDistance = 1;
 dotProductThreshold = 0.1;
+planeDistanceThreshold = 0.2;
 
 while size(points,2) >= 3
     for a = 1:attempts
@@ -65,7 +67,19 @@ while size(points,2) >= 3
             if dotProduct < dotProductThreshold
                 %This A, B, C, D set is a valid candidate for a polygon basis,
                 %because the points are almost coplanar
-
+                
+                %Find the plane of best fit for the 4 points
+                [planeNormal,~,planePoint] = affine_fit([A B C D]);
+                planeDistance = dot(planePoint, planeNormal);
+                %DEBUG - draw plane indicators
+                scatter3(planePoint(1), planePoint(2), planePoint(3), 'g')
+                scatter3(planePoint(1) + planeNormal(1), planePoint(2) + planeNormal(2), planePoint(3) + planeNormal(3), 'y')
+                
+                %Find all other points that lie on the plane (This may bridge across gaps to coplanar walls)
+                coplanarPoints = points(:,abs(planeNormal'*points) - planeDistance <= planeDistanceThreshold);
+                %DEBUG - highlight the found points
+                scatter3(coplanarPoints(1,:), coplanarPoints(2,:), coplanarPoints(3,:), 'r')
+                
                 %DEBUG - return the polygon ABCD
                 newPolygon = Polygon;
                 newPolygon.Points = [A, B, C, D];
