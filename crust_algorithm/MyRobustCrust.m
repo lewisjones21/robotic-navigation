@@ -58,6 +58,12 @@
 
 
 function [t,tnorm]=MyRobustCrust(p)
+
+%added by Lewis Jones to maintain consistent dimensions outside of this
+%function
+
+p = p';
+
 %error check
 
 if nargin>1
