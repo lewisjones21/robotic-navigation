@@ -3,7 +3,7 @@ function [] = PlotTriangles(triangles, points)
 figure(1);
 hold on;
 grid on;
-axis([-2 2 -2 2 -2 2]);
+axis([-2 2 -2 2 0 2]);
 xlabel('x');
 ylabel('y');
 zlabel('z');
