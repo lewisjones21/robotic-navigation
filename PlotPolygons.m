@@ -1,13 +1,21 @@
-function [] = PlotPolygons(polygons)
+function [] = PlotPolygons(polygons, points)
 
 figure(1);
+hold on;
+grid on;
+axis([-2.2 2.2 -2.2 2.2 -0.2 2.2]);
+xlabel('x');
+ylabel('y');
+zlabel('z');
+
 colormap hsv;
 
-C = [0 0.25 0.5 0.75];
+C = [ 1 ];
 
-for p = 1:size(polygons)
+for t = 1:size(polygons, 1)
 
-    fill3(polygons(p).Points(1,:), polygons(p).Points(2,:), polygons(p).Points(3,:), C)
+    XYZ = [ points(:,polygons(t, :))' ];
+    fill3(XYZ(:,1), XYZ(:,2), XYZ(:,3), C);
     
 end
 
