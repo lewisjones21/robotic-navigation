@@ -7,4 +7,3 @@ noise = randn(size(points)) * standarddeviation;
 points = points + noise;
 
 end
-

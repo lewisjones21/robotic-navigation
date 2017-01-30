@@ -10,7 +10,7 @@ function [points] = GenerateQuadrilateralPoints(corner, axis1, axis2, density1, 
 %             'Density values are too small.'))
 % end
 
-points = zeros(3, density1 * density2);
+points = zeros(density1 * density2, 3);
 
 inc1 = axis1 / (density1 - 1);
 inc2 = axis2 / (density2 - 1);
@@ -20,7 +20,7 @@ yPosition = corner;
 for y = 0:density2 - 1
     position = yPosition;
     for x = 0:density1 - 1
-        points(:,y * density1 + x + 1) = position;
+        points(y * density1 + x + 1,:) = position;
         position = position + inc1;
     end
     yPosition = yPosition + inc2;

@@ -20,8 +20,10 @@ proximityTolerance = 0.001;
 points = [];
 
 %Left Wall
-points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
-    [0, -depth, 0], [0, 0, height], xDensity, zDensity)];
+points = [points; GenerateQuadrilateralPoints([left, back, bottom], ...
+    [0, depth, -height * 0.66], [0, 0, height], xDensity, zDensity)];
+points = [points; GenerateQuadrilateralPoints([left, back, bottom], ...
+    [0, depth, 0], [0, 0, height * 0.33], xDensity, zDensity * 0.5)];
 
 %Back Wall
 points = [points; GenerateQuadrilateralPoints([left, back, bottom], ...
@@ -35,9 +37,9 @@ points = [points; GenerateQuadrilateralPoints([right, front, bottom], ...
 
 %Floor
 points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
-    [width * 0.5, 0, 0], [0, -depth, 0], xDensity, yDensity)];
+    [width * 0.5, 0, 0], [0, -depth, 0], xDensity * 0.5, yDensity)];
 points = [points; GenerateQuadrilateralPoints([left + width * 0.5, front, bottom], ...
-    [width * 0.5, 0, 0], [0, -depth * 0.25, 0], xDensity, yDensity * 0.25)];
+    [width * 0.5, 0, 0], [0, -depth * 0.25, 0], xDensity * 0.5, yDensity * 0.25)];
 
 %Ramp
 points = [points; GenerateQuadrilateralPoints([left + width * 0.5, front - depth * 0.25, bottom], ...
@@ -46,7 +48,9 @@ points = [points; GenerateQuadrilateralPoints([left + width * 0.5, front - depth
     [0, -depth * 0.5, 0], [0, 0, height * 0.25], xDensity * 0.5, zDensity * 0.25)];
 
 %Remove points that are to high
-points = points(points(:,3) <= height,:);
+points = points(points(:,3) <= top,:);
+%Remove points that are to low
+points = points(points(:,3) >= bottom,:);
 
 points = uniquetol(points, proximityTolerance, 'ByRows', true);
 

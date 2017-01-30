@@ -11,8 +11,8 @@ classifications = ones(size(polygons,1),1) * 3;%Default: Wall (3)
 for p = 1:size(polygons,1)
     
     %Determine the normal
-    a = points(:,polygons(p,2)) - points(:,polygons(p,1));
-    b = points(:,polygons(p,3)) - points(:,polygons(p,1));
+    a = points(polygons(p,2),:) - points(polygons(p,1),:);
+    b = points(polygons(p,3),:) - points(polygons(p,1),:);
     n = cross(a, b);
     
     if (abs(n(3)) > 0)
