@@ -8,7 +8,9 @@ savedhold = ishold;
 
 figure(1);
 
-span = [ min(points(:,1)) max(points(:,1)) min(points(:,2)) max(points(:,2)) min(points(:,3)) max(points(:,3)) ];
+%span = [ min([points(:,1); xlim(1)]) max([points(:,1); xlim(2)]) ...
+%        min([points(:,2); ylim(1)]) max([points(:,2); ylim(2)]) ...
+%        min([points(:,3); zlim(1)]) max([points(:,3); zlim(2)]) ];
 
 scatter3(points(:,1), points(:,2), points(:,3), 'o', 'MarkerFaceColor', 'w')
     
@@ -17,7 +19,7 @@ if drawIndices
     text(points(:,1), points(:,2), points(:,3), c);
 end
 
-axis(span);
+%axis(span);
 grid on;
 xlabel('x');
 ylabel('y');
