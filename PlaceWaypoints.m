@@ -1,4 +1,4 @@
-function [ waypoints ] = PlaceWaypoints(triangles, points, sharedEdges)
+function [ waypoints ] = PlaceWaypoints(triangles, points, sharedSides)
 %PLACEWAYPOINTS Places waypoints on the triangles in relevant places
 %   Places waypoints across the mesh defined by the triangles such that they
 %   cover the traversable area to a suitable spatial resolution
@@ -12,13 +12,13 @@ waypoints = [points(triangles(:,1),1) + points(triangles(:,2),1) + points(triang
             points(triangles(:,1),3) + points(triangles(:,2),3) + points(triangles(:,3),3)] / 3;
 
 if nargin > 2
-    %A list of shared edges has been provided
+    %A list of shared sides has been provided
     
     %Place waypoints at the midpoint of each shared edge
     waypoints = [waypoints;
-        [points(sharedEdges(:,3),1) + points(sharedEdges(:,4),1), ...
-        points(sharedEdges(:,3),2) + points(sharedEdges(:,4),2), ...
-        points(sharedEdges(:,3),3) + points(sharedEdges(:,4),3)] / 2 ];
+        [points(sharedSides(:,3),1) + points(sharedSides(:,4),1), ...
+        points(sharedSides(:,3),2) + points(sharedSides(:,4),2), ...
+        points(sharedSides(:,3),3) + points(sharedSides(:,4),3)] / 2 ];
     
 end
 

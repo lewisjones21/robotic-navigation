@@ -1,4 +1,4 @@
-function [  ] = PlotSharedEdges( sharedEdges, triangles, points )
+function [  ] = PlotSharedSides( sharedSides, triangles, points )
 %PLOTSHAREDEDGES Draws lines between triangles with shared edges
 %   Draws a plot similar to the Voronoi tessellation
 
@@ -7,11 +7,11 @@ savedhold = ishold;
 figure(1);
 
 %As a test, first just highlight shared edges
-%XYZ = [ points(sharedEdges(:,3),:) points(sharedEdges(:,4),:) ];
+%XYZ = [ points(sharedSides(:,3),:) points(sharedSides(:,4),:) ];
 
 %Find the relevant triangle vertices
-firstTriangleIndices = sharedEdges(:,1);
-secondTriangleIndices = sharedEdges(:,2);
+firstTriangleIndices = sharedSides(:,1);
+secondTriangleIndices = sharedSides(:,2);
 firstTrianglesVertexIndices = triangles(firstTriangleIndices,:);
 secondTrianglesVertexIndices = triangles(secondTriangleIndices,:);
 firstTriangleCentres = (points(firstTrianglesVertexIndices(:,1),:) ...
@@ -25,8 +25,8 @@ X = [ firstTriangleCentres(:,1) secondTriangleCentres(:,1) ];
 Y = [ firstTriangleCentres(:,2) secondTriangleCentres(:,2) ];
 Z = [ firstTriangleCentres(:,3) secondTriangleCentres(:,3) ];
 
-% leftPointIndices = sharedEdges(:,3);
-% rightPointIndices = sharedEdges(:,4);
+% leftPointIndices = sharedSides(:,3);
+% rightPointIndices = sharedSides(:,4);
 % leftPointCoordinates = points(leftPointIndices,:);
 % rightPointCoordinates = points(rightPointIndices,:);
 

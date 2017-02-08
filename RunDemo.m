@@ -14,9 +14,9 @@ TraversableTriangles = [ GroundTriangles; ClassifiedTriangles(ClassifiedTriangle
 PlotTriangles(ClassifiedTriangles, Points);
 hold on;
 
-SharedEdges = FindSharedEdges(TraversableTriangles, Points);
+SharedSides = FindSharedSides(TraversableTriangles, Points);
 
-PlotSharedEdges(SharedEdges, TraversableTriangles, Points);
+PlotSharedSides(SharedSides, TraversableTriangles, Points);
 
 Waypoints = PlaceWaypoints(TraversableTriangles, Points);
 
