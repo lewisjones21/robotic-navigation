@@ -1,5 +1,7 @@
 function [points] = GenerateMock3DData()
 
+proximityTolerance = 0.001;
+
 left = 2;
 right = -2;
 back = -2;
@@ -14,8 +16,6 @@ height = top - bottom;
 xDensity = 16;
 yDensity = 16;
 zDensity = 8;
-
-proximityTolerance = 0.001;
 
 points = [];
 
@@ -51,6 +51,7 @@ points = [points; GenerateQuadrilateralPoints([left + width * 0.5, front - depth
 points = points(points(:,3) <= top,:);
 %Remove points that are to low
 points = points(points(:,3) >= bottom,:);
+    
 
 points = uniquetol(points, proximityTolerance, 'ByRows', true);
 
