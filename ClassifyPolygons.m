@@ -17,15 +17,17 @@ for p = 1:size(polygons,1)
     
     if (abs(n(3)) > 0)
         %Turn the normal into a pair of ratios: x/z, y/z
-        n = n / n(3);
+        n = n / abs(n(3));
         horizontalfactor = sqrt(n(1) * n(1) + n(2) * n(2));
 
         if (horizontalfactor < groundtolerance)
             classifications(p) = 1;
             continue;
-        else if (horizontalfactor < slopetolerance)
-            classifications(p) = 2;
-            continue;
+        else
+            if (horizontalfactor < slopetolerance)
+                classifications(p) = 2;
+                continue;
+            end
         end
     end
     
