@@ -12,7 +12,7 @@ if ~Basic
     Triangles = CullTriangles(Triangles, Points, 0.7);
     
     %Decimate the mesh to simplify the data
-    [Triangles, Points] = reducepatch(Triangles, Points, 200 - Basic * 120);
+    [Triangles, Points] = reducepatch(Triangles, Points, 400);
 else
     Points = [
         0 0 0;
@@ -49,7 +49,11 @@ SharedSides = FindSharedSides(TraversableTriangles, Points);
 
 %Place waypoints onto the mesh
 %Waypoints = PlaceWaypoints(TraversableTriangles, Points, SharedSides);
-[Waypoints, Edges] = GenerateNavigationGraph(TraversableTriangles, Points, SharedSides);
+[Waypoints, Edges, WaypointTriangles] = GenerateNavigationGraph(TraversableTriangles, Points, SharedSides);
+
+%Validate the waypoints and edges based on possible obstruction by other triangles
+%[Waypoints, Edges] = ValidateNavigationGraph(Waypoints, Edges, Triangles, Points);
+
 %Plot the edges
 PlotEdges(Edges, Waypoints);
 %Plot the waypoints
