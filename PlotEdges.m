@@ -1,4 +1,4 @@
-function [  ] = PlotEdges( edges, waypoints )
+function [  ] = PlotEdges( edges, waypoints, colour )
 %PLOTEDGES Draws lines between waypoints to represent their interconnecting
 %arcs
 
@@ -11,10 +11,10 @@ Y = [ waypoints(edges(:,1),2) waypoints(edges(:,2),2) ];
 Z = [ waypoints(edges(:,1),3) waypoints(edges(:,2),3) ];
 
 %Draw lines where edges exist
-line(X(1,:), Y(1,:), Z(1,:), 'Color', 'yellow','LineWidth',1.5);
+line(X(1,:), Y(1,:), Z(1,:), 'Color', colour,'LineWidth',1.5);
 hold on;
 for l = 2:size(X,1)
-    line(X(l,:), Y(l,:), Z(l,:), 'Color', 'yellow','LineWidth',1.5);
+    line(X(l,:), Y(l,:), Z(l,:), 'Color', colour,'LineWidth',1.5);
 end
 
 grid on;

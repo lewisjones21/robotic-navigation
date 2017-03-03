@@ -1,4 +1,4 @@
-function [] = PlotWaypoints(points, drawIndices)
+function [] = PlotWaypoints(points, colour, drawIndices)
 
 if nargin < 2
    drawIndices = 0;
@@ -12,7 +12,7 @@ figure(1);
 %        min([points(:,2); ylim(1)]) max([points(:,2); ylim(2)]) ...
 %        min([points(:,3); zlim(1)]) max([points(:,3); zlim(2)]) ];
 
-scatter3(points(:,1), points(:,2), points(:,3), 'o', 'MarkerFaceColor', 'w')
+scatter3(points(:,1), points(:,2), points(:,3), 'o', 'MarkerFaceColor', colour)
     
 if drawIndices
     a = [1:size(points, 1)]'; b = num2str(a); c = cellstr(b);

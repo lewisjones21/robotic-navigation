@@ -1,5 +1,5 @@
 function [ sharedSides ] = FindSharedSides(triangles, points)
-%FINDSHAREDSIDES Finds all shared triangle edged
+%FINDSHAREDSIDES Finds all shared triangle sides
 %   Returns a list of all of the sides that are shared between pairs of
 %   triangles; each output row records the two relevant triangle indices
 %   and the indices of the two points that define the shared side
