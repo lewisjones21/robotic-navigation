@@ -41,6 +41,7 @@ end
 ClassifiedTriangles = ClassifyPolygons(Triangles, Points, 8, 30);
 GroundTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4)==1,1:3);
 TraversableTriangles = [ GroundTriangles; ClassifiedTriangles(ClassifiedTriangles(:,4)==2,1:3) ];
+WallTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4)==3,1:3);
 
 %Plot the mesh
 PlotTriangles(ClassifiedTriangles, Points);
@@ -55,10 +56,23 @@ SharedSides = FindSharedSides(TraversableTriangles, Points);
 %Waypoints = PlaceWaypoints(TraversableTriangles, Points, SharedSides);
 [Waypoints, Edges, WaypointTriangles] = GenerateNavigationGraph(TraversableTriangles, Points, SharedSides);
 
+%Plot the edges
+PlotEdges(Edges, Waypoints, 'red');
+%Plot the waypoints
+PlotWaypoints(Waypoints, 'red', false);
+
 %Validate the waypoints and edges based on possible obstruction by other triangles
-%[Waypoints, Edges] = ValidateNavigationGraph(Waypoints, Edges, Triangles, Points);
+CollisionRadius = 0.2;
+[Waypoints, Edges, WaypointTriangles] ...
+    = ValidateNavigationGraph(CollisionRadius, Waypoints, Edges, WaypointTriangles, SharedSides, WallTriangles, Points);
 
 %Plot the edges
-PlotEdges(Edges, Waypoints);
+PlotEdges(Edges, Waypoints, 'black');
 %Plot the waypoints
-PlotWaypoints(Waypoints);
+PlotWaypoints(Waypoints, 'white', false);
+
+%Find a path through the navigation graph
+Path = FindPath(Waypoints, Edges, [1, -1, 0.2], [-1, -1, 0.7]);
+%Plot the path
+PlotPath(Waypoints(Path,:))
+
