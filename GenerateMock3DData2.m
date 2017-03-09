@@ -1,4 +1,4 @@
-function [points] = GenerateMock3DData()
+function [points] = GenerateMock3DData2()
 
 proximityTolerance = 0.001;
 

@@ -1,40 +1,76 @@
 
 hold off;
 
-if ~Basic
-    %Generate a point cloud
-    Points = GenerateMock3DData();
-    Points = AddNoise(Points, 0.003);
+if ~exist('TestCase', 'var')
+    warning('TestCase not defined; using default value:');
+    TestCase = 1
+end
 
-    %Generate a closed mesh based on the point cloud
-    Triangles = MyRobustCrust(Points);
-    %Remove large triangles, which are typically capping a concave mesh
-    Triangles = CullTriangles(Triangles, Points, 0.7);
-    
-    %Decimate the mesh to simplify the data
-    [Triangles, Points] = reducepatch(Triangles, Points, 400);
-else
-    Points = [
-        0 0 0;
-        1 0 0;
-        1 1 0;
-        0 1 0;
-        0 2 0.5;
-        1 2 0.2;
-        2 2 0;
-        2 0 0;
-        2 1 0;
-        1 1 -0.3;
-        ];
-    Triangles = [
-        1 2 3;
-        1 3 4;
-        3 4 6;
-        4 5 6;
-        3 6 7;
-        2 8 9;
-        2 9 10;
-        ];
+switch TestCase
+    case 0
+        Use existing points and triangles
+        quit = false;
+        if ~exist('Points', 'var')
+            warning('Points matrix does not exist; create some points or set TestCase > 0');
+            quit = true;
+        else
+            if isempty(Points)
+                warning('Points matrix is empty; create some points or set TestCase > 0');
+                quit = true;
+            end
+        end
+        if ~exist('Triangles', 'var')
+            warning('Triangles matrix does not exist; create some points or set TestCase > 0');
+            quit = true;
+        else
+            if isempty(Triangles)
+                warning('Triangles matrix is empty; create some points or set TestCase > 0');
+                quit = true;
+            end
+        end
+        if quit == true
+            clear quit;
+            return;
+        end
+        clear quit;
+        
+    case 1
+        [Points, Triangles] = GenerateMock3DData1();
+        StartPos = [0.66, 0.33, 0.2];
+        EndPos = [1.5, 1.5, 0.2];
+        
+    case 2
+        %Generate a point cloud
+        Points = GenerateMock3DData2();
+        Points = AddNoise(Points, 0.003);
+
+        %Generate a closed mesh based on the point cloud
+        Triangles = MyRobustCrust(Points);
+        %Remove large triangles, which are typically capping a concave mesh
+        Triangles = CullTriangles(Triangles, Points, 0.7);
+
+        %Decimate the mesh to simplify the data
+        [Triangles, Points] = reducepatch(Triangles, Points, 400);
+        
+        StartPos = [1, -1, 0.2];
+        EndPos = [-1, -1, 0.7];
+        
+    case 3
+        %Generate a point cloud
+        Points = GenerateMock3DData3();
+        Points = AddNoise(Points, 0.003);
+
+        %Generate a closed mesh based on the point cloud
+        Triangles = MyRobustCrust(Points);
+        %Remove large triangles, which are typically capping a concave mesh
+        Triangles = CullTriangles(Triangles, Points, 0.65);
+
+        %Decimate the mesh to simplify the data
+        [Triangles, Points] = reducepatch(Triangles, Points, 500);
+        
+        StartPos = [1, -1, 0.2];
+        EndPos = [-1, -1, 0.6];
+        
 end
 
 %Classify the triangles and sub-group them
@@ -72,7 +108,9 @@ PlotEdges(Edges, Waypoints, 'black');
 PlotWaypoints(Waypoints, 'white', false);
 
 %Find a path through the navigation graph
-Path = FindPath(Waypoints, Edges, [1, -1, 0.2], [-1, -1, 0.7]);
+Path = FindPath(Waypoints, Edges, StartPos, EndPos);
 %Plot the path
 PlotPath(Waypoints(Path,:))
+PlotPath(StartPos)
+PlotPath(EndPos)
 

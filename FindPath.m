@@ -36,26 +36,6 @@ for i = 1:size(waypoints, 1)
     end
 end
 
-%Find a path from the start waypoint to the target
-% %(For now, search randomly until the target is found)
-% searchIteration = 1;
-% currentWaypoint = startWaypointIndex;
-% while currentWaypoint ~= targetWaypointIndex && searchIteration < maxIterations
-%     
-%     waypointPath = [waypointPath, currentWaypoint];
-%     %Find all edges connecting to the current waypoint (and rearrange such
-%     %that the current waypoint is stored under the first index)
-%     connectedEdges = [ edges(edges(:,1)==currentWaypoint,:); ...
-%         [ edges(edges(:,2)==currentWaypoint,2), edges(edges(:,2)==currentWaypoint,1) ]];
-%     %Move to a randomly selected connected waypoint
-%     currentWaypoint = connectedEdges(randi(size(connectedEdges, 1), size(1)),2);
-%     
-%     searchIteration = searchIteration + 1;
-%     
-% end
-% %Add the final (hopefully target) waypoint index to the end of the path
-% waypointPath = [waypointPath, currentWaypoint];
-
 %Precalculate the length of all edges
 edgeLengths = zeros(size(edges, 1), 1);
 for e = 1:size(edges, 1)
@@ -79,6 +59,7 @@ if waypointBacktrace(targetWaypointIndex) == 0
     %The target wasn't found in this navigation graph, so is unreachable
     %Return the start waypoint as the path
     waypointPath = startWaypointIndex;
+    warning('Target waypoint cannot be reached.')
     return;
 end
 
@@ -95,23 +76,6 @@ while iteration < maxIterations
     end
     
     currentWaypoint = waypointBacktrace(currentWaypoint);
-    
-%     %Find a list of waypoints connected to the current one
-%     %(Switch the indices so the current waypoint is first)
-%     connectedEdges = [ edges(edges(:,1) == currentWaypoint,:); ...
-%                         edges(edges(:,2) == currentWaypoint,[ 2 1 ]) ];
-%     connectedEdgeLengths = [ edgeLengths(edges(:,1) == currentWaypoint); ...
-%                         edgeLengths(edges(:,2) == currentWaypoint) ];
-%     
-%     %Move to the next waypoint whose distance matches it's distance away
-%     for c = 1:size(connectedEdges, 1)
-%         if waypointDistances(connectedEdges(c,2)) ...
-%                 == waypointDistances(connectedEdges(c,1)) ...
-%                     - connectedEdgeLengths(c)
-%             currentWaypoint = connectedEdges(c,2);
-%             break;
-%         end
-%     end
     
     iteration = iteration + 1;
 end
