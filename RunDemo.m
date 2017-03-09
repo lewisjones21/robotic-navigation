@@ -110,7 +110,7 @@ PlotWaypoints(Waypoints, 'white', false);
 %Find a path through the navigation graph
 Path = FindPath(Waypoints, Edges, StartPos, EndPos);
 %Plot the path
-PlotPath(Waypoints(Path,:))
-PlotPath(StartPos)
-PlotPath(EndPos)
+PlotPath(StartPos, [ 0.9100 0.4100 0.1700 ])
+PlotPath(EndPos, [ 0.9100 0.4100 0.1700])
+PlotPath(Waypoints(Path,:), 'r')
 
