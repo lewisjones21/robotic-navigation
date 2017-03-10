@@ -30,8 +30,9 @@ switch TestCase
         
     case 1
         [Points, Triangles] = GenerateMock3DData1();
-        StartPos = [0.66, 0.33, 0.2];
-        EndPos = [1.5, 1.5, 0.2];
+        PathCoords = [  0.66, 0.33, 0.2;
+                        1.5, 1.5, 0.2;
+                        ];
         
     case 2
         %Generate a point cloud
@@ -46,8 +47,11 @@ switch TestCase
         %Decimate the mesh to simplify the data
         [Triangles, Points] = reducepatch(Triangles, Points, 300);
         
-        StartPos = [1, -1, 0.2];
-        EndPos = [-1, -1, 0.7];
+        PathCoords = [  1, -1, 0.2;
+                        1.5, 1.5, 0.2;
+                        -1.25, 1.5, 0.2;
+                        -1, -1, 0.7;
+                        ];
         
     case 3
         %Generate a point cloud
@@ -62,8 +66,9 @@ switch TestCase
         %Decimate the mesh to simplify the data
         [Triangles, Points] = reducepatch(Triangles, Points, 300);
         
-        StartPos = [1, -1, 0.2];
-        EndPos = [-1, -1, 0.6];
+        PathCoords = [  1, -1, 0.2;
+                        -1, -1, 0.6;
+                        ];
         
 end
 
@@ -111,9 +116,8 @@ PlotEdges(Edges, Waypoints, 'black');
 PlotWaypoints(Waypoints, 'white', false);
 
 %Find a path through the navigation graph
-Path = FindPath(Waypoints, Edges, StartPos, EndPos);
+Path = FindPath(Waypoints, Edges, PathCoords);
 %Plot the path
-PlotPath(StartPos, [ 0.9100 0.4100 0.1700 ])
-PlotPath(EndPos, [ 0.9100 0.4100 0.1700])
+PlotNodes(PathCoords, 'y')
 PlotPath(Waypoints(Path,:), 'm')
 

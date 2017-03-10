@@ -1,13 +1,28 @@
-function [ waypointPath ] = FindPath( waypoints, edges, startCoords, targetCoords )
+function [ waypointPath ] = FindPath( waypoints, edges, coords )
 %FINDPATH Generates a path from the specified waypoint to the target
 %coordinates
-%   Generates a path through the provided navigation network from the
-%   waypoint with the specified start index to the waypoint that is closest
-%   to the given target coordinates
+%   Generates a path through the provided navigation network that passes
+%   through the closest waypoints to the given coordinates
 
-arbitraryLargeValue = 10000;
+%If more than 2 coordinates are given, the path must pass through
+%intermediate points; routes for these are calculated recursively
+if size(coords, 1) > 2
+    priorWaypointPath = FindPath(waypoints, edges, coords(1:size(coords,1)-1,:));
+    startCoords = coords(size(coords,1)-1,:);
+    targetCoords = coords(size(coords,1),:);
+else
+    if size(coords, 1) == 2
+        priorWaypointPath = [];
+        startCoords = coords(1,:);
+        targetCoords = coords(2,:);
+    else
+        error('Not enough coordinate given; path cannot be found.');
+    end
+end
 
 waypointPath = [];
+
+arbitraryLargeValue = 10000;
 maxIterations = size(waypoints, 1) + 10;     %Set this as a failsafe
 
 %Find the start waypoint (the one closest to the start coordinates)
@@ -60,27 +75,30 @@ if waypointBacktrace(targetWaypointIndex) == 0
     %Return the start waypoint as the path
     waypointPath = startWaypointIndex;
     warning('Target waypoint cannot be reached.')
-    return;
-end
+else
+    %Find the shortest path to the target waypoints, given waypoint distances
+    iteration = 1;
+    currentWaypoint = targetWaypointIndex;
+    while iteration < maxIterations
 
-%Find the shortest path to the target waypoints, given waypoint distances
-iteration = 1;
-currentWaypoint = targetWaypointIndex;
-while iteration < maxIterations
-    
-    %Add the current waypoint to the path
-    waypointPath = [waypointPath, currentWaypoint];
-    
-    if currentWaypoint == startWaypointIndex
-        return;
+        %Add the current waypoint to the path
+        waypointPath = [waypointPath, currentWaypoint];
+
+        if currentWaypoint == startWaypointIndex
+            break;
+        end
+
+        currentWaypoint = waypointBacktrace(currentWaypoint);
+
+        iteration = iteration + 1;
     end
-    
-    currentWaypoint = waypointBacktrace(currentWaypoint);
-    
-    iteration = iteration + 1;
+
+    %Flip the path back to the correct direction
+    waypointPath = flip(waypointPath);
 end
 
-waypointPath = flip(waypointPath);
+%Prepend the path calculated for previous intermediate coordinates
+waypointPath = [ priorWaypointPath, waypointPath ];
 
 
 end
