@@ -7,10 +7,10 @@ figure(1);
 lastIndex = size(pathWaypoints,1);
 
 %Draw the interconnecting lines
-line(pathWaypoints(1,1), pathWaypoints(1,2), pathWaypoints(1,3), 'Color', colour,'LineWidth',1.5);
+line(pathWaypoints(1,1), pathWaypoints(1,2), pathWaypoints(1,3), 'Color', colour,'LineWidth',3);
 hold on;
 for l = 2:lastIndex
-    line(pathWaypoints(:,1), pathWaypoints(:,2), pathWaypoints(:,3), 'Color', colour,'LineWidth',1.5);
+    line(pathWaypoints(:,1), pathWaypoints(:,2), pathWaypoints(:,3), 'Color', colour,'LineWidth',3);
 end
 
 %Draw the path waypoints (highlighted)
