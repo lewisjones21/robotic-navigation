@@ -19,20 +19,14 @@ switch TestCase
                 quit = true;
             end
         end
-        if ~exist('Triangles', 'var')
-            warning('Triangles matrix does not exist; create some points or set TestCase > 0');
-            quit = true;
-        else
-            if isempty(Triangles)
-                warning('Triangles matrix is empty; create some points or set TestCase > 0');
-                quit = true;
-            end
-        end
         if quit == true
             clear quit;
             return;
         end
         clear quit;
+        
+        %Generate a closed mesh based on the point cloud
+        Triangles = MyRobustCrust(Points);
         
     case 1
         [Points, Triangles] = GenerateMock3DData1();
@@ -47,10 +41,10 @@ switch TestCase
         %Generate a closed mesh based on the point cloud
         Triangles = MyRobustCrust(Points);
         %Remove large triangles, which are typically capping a concave mesh
-        Triangles = CullTriangles(Triangles, Points, 0.7);
+        Triangles = CullTriangles(Triangles, Points, 0.6);
 
         %Decimate the mesh to simplify the data
-        [Triangles, Points] = reducepatch(Triangles, Points, 400);
+        [Triangles, Points] = reducepatch(Triangles, Points, 300);
         
         StartPos = [1, -1, 0.2];
         EndPos = [-1, -1, 0.7];
@@ -66,7 +60,7 @@ switch TestCase
         Triangles = CullTriangles(Triangles, Points, 0.65);
 
         %Decimate the mesh to simplify the data
-        [Triangles, Points] = reducepatch(Triangles, Points, 500);
+        [Triangles, Points] = reducepatch(Triangles, Points, 300);
         
         StartPos = [1, -1, 0.2];
         EndPos = [-1, -1, 0.6];
@@ -77,6 +71,15 @@ end
 ClassifiedTriangles = ClassifyPolygons(Triangles, Points, 8, 30);
 GroundTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4)==1,1:3);
 TraversableTriangles = [ GroundTriangles; ClassifiedTriangles(ClassifiedTriangles(:,4)==2,1:3) ];
+
+%Remove walls that are too small (likely to be artefacts)
+MinObstacleHeight = 0.03;
+ClassifiedTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4) ~= 3 | max([ ...
+    abs(Points(ClassifiedTriangles(:,1),3)-Points(ClassifiedTriangles(:,2),3)), ...
+    abs(Points(ClassifiedTriangles(:,2),3)-Points(ClassifiedTriangles(:,3),3)), ...
+    abs(Points(ClassifiedTriangles(:,3),3)-Points(ClassifiedTriangles(:,1),3))], [], 2) ...
+        > MinObstacleHeight,1:4);
+%Extract walls
 WallTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4)==3,1:3);
 
 %Plot the mesh
@@ -112,5 +115,5 @@ Path = FindPath(Waypoints, Edges, StartPos, EndPos);
 %Plot the path
 PlotPath(StartPos, [ 0.9100 0.4100 0.1700 ])
 PlotPath(EndPos, [ 0.9100 0.4100 0.1700])
-PlotPath(Waypoints(Path,:), 'r')
+PlotPath(Waypoints(Path,:), 'm')
 
