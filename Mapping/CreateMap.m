@@ -1,4 +1,4 @@
-function [ triangles, points, traversableTriangles, wallTriangles, sharedSides, boundaryPoints ] ...
+function [ triangles, points, traversableTriangles, wallTriangles, sharedSides, boundaryPointIndices ] ...
     = CreateMap( points, maxSideLength, minObstacleHeight )
 %CREATEMAP Creates a map of the environment
 %   Generates a mesh (and accompanying components) based on the given set
@@ -24,7 +24,7 @@ wallTriangles = wallTriangles(max([ ...
 [sharedSides] = FindSharedSides(triangles, points);
 
 %Find points that are on the boundary of the mesh
-[boundaryPoints] = FindBoundaryPoints(points, sharedSides);
+[boundaryPointIndices] = FindBoundaryPoints(points, sharedSides);
 
 %Find sides that are common to more than one traversable triangle
 [sharedSides] = FindSharedSides(traversableTriangles, points);
