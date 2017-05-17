@@ -1,5 +1,5 @@
 function [ validWaypoints, validEdges, validWaypointTriangles ] ...
-    = ValidateNavigationGraph( collisionRadius, waypoints, edges, waypointTriangles, sharedSides, wallTriangles, points )
+    = ValidateNavigationGraph( wheelSpan, collisionRadius, waypoints, edges, waypointTriangles, traversableTriangles, wallTriangles, points )
 %VALIDATENAVIGATIONGRAPH Find the subset of the navigation graph that is
 %valid
 %   Returns the areas in the navigation graph that do not intersect walls
@@ -14,12 +14,24 @@ validWaypointTriangles = [];
 currentIndex = 1;
 for w = 1:size(waypoints, 1)
     
-    valid = true;
-    for t = 1:size(wallTriangles, 1)
-        
-        valid = ~CheckSphereTriangleCollision(points(wallTriangles(t,:),:), waypoints(w,:), collisionRadius);
-        if ~valid
-            break;
+    valid = (max([ ...
+        abs(points(traversableTriangles(waypointTriangles(w),1),3) ...
+            - points(traversableTriangles(waypointTriangles(w),2),3)), ...
+        abs(points(traversableTriangles(waypointTriangles(w),2),3) ...
+            - points(traversableTriangles(waypointTriangles(w),3),3)), ...
+        abs(points(traversableTriangles(waypointTriangles(w),3),3) ...
+            - points(traversableTriangles(waypointTriangles(w),1),3))], [], 2) ...
+                > wheelSpan);
+    
+    if valid
+        for t = 1:size(wallTriangles, 1)
+
+            valid = ~CheckSphereTriangleCollision(points(wallTriangles(t,:),:), ...
+                waypoints(w,:), collisionRadius);
+
+            if ~valid
+                break;
+            end
         end
     end
     if valid
