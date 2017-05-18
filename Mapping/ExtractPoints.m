@@ -1,4 +1,4 @@
-function [points] = ExtractPoints(image, depthsteptolerance)
+function [ points ] = ExtractPoints( image, depthsteptolerance )
 
 if nargin < 2
     depthsteptolerance = 0;%I.e. don't correct depth steps
