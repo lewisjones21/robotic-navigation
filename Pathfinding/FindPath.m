@@ -4,6 +4,13 @@ function [ waypointPath ] = FindPath( waypoints, edges, coords )
 %   Generates a path through the provided navigation network that passes
 %   through the closest waypoints to the given coordinates
 
+
+waypointPath = [];
+
+if size(waypoints, 1) <= 0 || size(edges, 1) <= 0 || size(coords, 1) <= 0
+    return;
+end
+
 %If more than 2 coordinates are given, the path must pass through
 %intermediate points; routes for these are calculated recursively
 if size(coords, 1) > 2
@@ -19,8 +26,6 @@ else
         error('Not enough coordinate given; path cannot be found.');
     end
 end
-
-waypointPath = [];
 
 arbitraryLargeValue = 10000;
 maxIterations = size(waypoints, 1) + 10;     %Set this as a failsafe

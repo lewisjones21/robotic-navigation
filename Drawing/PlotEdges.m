@@ -1,6 +1,15 @@
-function [  ] = PlotEdges( edges, waypoints, colour )
+function [] = PlotEdges( edges, waypoints, colour )
 %PLOTEDGES Draws lines between waypoints to represent their interconnecting
 %arcs
+
+if size(edges, 1) <= 0
+    warning('No edges given');
+    return;
+end
+if size(waypoints, 1) <= 0
+    warning('No waypoints given');
+    return;
+end
 
 savedhold = ishold;
 

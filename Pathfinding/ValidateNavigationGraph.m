@@ -9,9 +9,9 @@ function [ validWaypoints, validEdges, validWaypointTriIndices ] ...
 %   using the collision radius given
 
 waypointIndexMap = zeros(size(waypoints, 1), 1);
-validWaypoints = [];
+% validWaypoints = [];
 validEdges = [];
-validWaypointTriIndices = [];
+% validWaypointTriIndices = [];
 
 %Find out which waypoints are valid
 currentIndex = 1;
@@ -54,11 +54,13 @@ end
 %Reduce the waypoints to those which are valid
 validWaypoints = waypoints(waypointIndexMap > 0,:);
 
-%Reduce the indices on the edges to match the new waypoint indices
-validEdges = [ waypointIndexMap(edges(:,1)), waypointIndexMap(edges(:,2)) ];
-
-%Reduce the edges to those which have two valid waypoints at their ends
-validEdges = validEdges(validEdges(:,1) > 0 & validEdges(:,2) > 0,:);
+if size(edges, 1) > 0
+    %Reduce the indices on the edges to match the new waypoint indices
+    validEdges = [ waypointIndexMap(edges(:,1)), waypointIndexMap(edges(:,2)) ];
+    
+    %Reduce the edges to those which have two valid waypoints at their ends
+    validEdges = validEdges(validEdges(:,1) > 0 & validEdges(:,2) > 0,:);
+end
 
 validWaypointTriIndices = waypointTriIndices(waypointIndexMap > 0,:);
 

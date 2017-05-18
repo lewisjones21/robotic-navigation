@@ -31,30 +31,32 @@ waypointTriIndices = [traversableTriIndices(cumsum(ones(size(traversableTriangle
 edges = [];%This can only be accurately populated if sharedSides is given
 
 if nargin > 3
-    %A list of shared sides has been provided
-    
-    %Place waypoints at the midpoint of each shared side
-    waypoints = [waypoints;
-        [points(sharedSides(:,3),1) + points(sharedSides(:,4),1), ...
-        points(sharedSides(:,3),2) + points(sharedSides(:,4),2), ...
-        points(sharedSides(:,3),3) + points(sharedSides(:,4),3)] / 2 ];
-    waypointTriIndices = [waypointTriIndices; sharedSides(:,1), sharedSides(:,2)];
-    
-    %Find the index of the first waypoint that lies on a shared side
-    sideWaypointIndex = find(waypointTriIndices(:,2) ~= -1);
-    sideWaypointIndex = sideWaypointIndex(1);
-    
-    %For every waypoint placed on a shared side, place two edges, leading 
-    %to the centroids of each sharing triangle 
-    edges = ones((size(waypointTriIndices, 1) - sideWaypointIndex + 1) * 2, 2);
-    edgeNumber = 1;
-    for i = sideWaypointIndex:size(waypointTriIndices, 1)
+    %A list of shared sides has been provided; check it is not empty
+    if size(sharedSides, 1) > 0
         
-        edges(edgeNumber,:) = [ waypointTriIndices(i, 1), i ];
-        edgeNumber = edgeNumber + 1;
-        edges(edgeNumber,:) = [ waypointTriIndices(i, 2), i ];
-        edgeNumber = edgeNumber + 1;
-        
+        %Place waypoints at the midpoint of each shared side
+        waypoints = [waypoints;
+            [points(sharedSides(:,3),1) + points(sharedSides(:,4),1), ...
+            points(sharedSides(:,3),2) + points(sharedSides(:,4),2), ...
+            points(sharedSides(:,3),3) + points(sharedSides(:,4),3)] / 2 ];
+        waypointTriIndices = [waypointTriIndices; sharedSides(:,1), sharedSides(:,2)];
+
+        %Find the index of the first waypoint that lies on a shared side
+        sideWaypointIndex = find(waypointTriIndices(:,2) ~= -1);
+        sideWaypointIndex = sideWaypointIndex(1);
+
+        %For every waypoint placed on a shared side, place two edges, leading 
+        %to the centroids of each sharing triangle 
+        edges = ones((size(waypointTriIndices, 1) - sideWaypointIndex + 1) * 2, 2);
+        edgeNumber = 1;
+        for i = sideWaypointIndex:size(waypointTriIndices, 1)
+
+            edges(edgeNumber,:) = [ waypointTriIndices(i, 1), i ];
+            edgeNumber = edgeNumber + 1;
+            edges(edgeNumber,:) = [ waypointTriIndices(i, 2), i ];
+            edgeNumber = edgeNumber + 1;
+
+        end 
     end
     
 end

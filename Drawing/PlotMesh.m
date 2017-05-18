@@ -17,30 +17,38 @@ colormap(map);
 
 c = triangleSlopes;
 
-%Allow the first triangle to reset the figure if hold is off
-fill3(points(triangles(traversableTriIndices(1),:),1), ...
-        points(triangles(traversableTriIndices(1),:),2), ...
-        points(triangles(traversableTriIndices(1),:),3), ...
-        c(traversableTriIndices(1)));
-    
-hold on;
-%Plot the remainder of the traversable triangles
-for t = 2:size(traversableTriIndices, 1)
+if size(traversableTriIndices, 1) > 0
+    %Allow the first triangle to reset the figure if hold is off
+    fill3(points(triangles(traversableTriIndices(1),:),1), ...
+            points(triangles(traversableTriIndices(1),:),2), ...
+            points(triangles(traversableTriIndices(1),:),3), ...
+            c(traversableTriIndices(1)));
 
-    fill3(points(triangles(traversableTriIndices(t),:),1), ...
-        points(triangles(traversableTriIndices(t),:),2), ...
-        points(triangles(traversableTriIndices(t),:),3), ...
-        c(traversableTriIndices(t)));
+    hold on;
+    %Plot the remainder of the traversable triangles
+    for t = 2:size(traversableTriIndices, 1)
 
+        fill3(points(triangles(traversableTriIndices(t),:),1), ...
+            points(triangles(traversableTriIndices(t),:),2), ...
+            points(triangles(traversableTriIndices(t),:),3), ...
+            c(traversableTriIndices(t)));
+
+    end
+else
+    warning('No traversable triangles given');
 end
 
-%Plot the wall triangles
-for t = 1:size(wallTriIndices, 1)
-
-    fill3(points(triangles(wallTriIndices(t),:),1), ...
-        points(triangles(wallTriIndices(t),:),2), ...
-        points(triangles(wallTriIndices(t),:),3), 'r');
-
+if size(wallTriIndices, 1) > 0
+    %Plot the wall triangles
+    for t = 1:size(wallTriIndices, 1)
+        
+        fill3(points(triangles(wallTriIndices(t),:),1), ...
+            points(triangles(wallTriIndices(t),:),2), ...
+            points(triangles(wallTriIndices(t),:),3), 'r');
+        
+    end
+else
+    warning('No wall triangles given');
 end
 
 axis(span);

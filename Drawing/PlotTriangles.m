@@ -1,5 +1,14 @@
 function [] = PlotTriangles(triangles, points)
 
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
+
 savedhold = ishold;
 
 span = [ min(points(:,1)) max(points(:,1)) min(points(:,2)) max(points(:,2)) min(points(:,3)) max(points(:,3)) ];

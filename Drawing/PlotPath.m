@@ -1,5 +1,10 @@
 function [] = PlotPath(pathWaypoints, colour)
 
+if size(pathWaypoints, 1) <= 0
+    warning('No path waypoints given');
+    return;
+end
+
 savedhold = ishold;
 
 figure(1);

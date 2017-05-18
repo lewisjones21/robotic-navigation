@@ -1,5 +1,9 @@
 function [] = PlotNodes(nodes, colour)
 
+if size(nodes, 1) <= 0
+    warning('No nodes given');
+    return;
+end
 savedhold = ishold;
 
 figure(1);

@@ -1,5 +1,9 @@
 function [] = PlotPoints(points, drawIndices)
 
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
 if nargin < 2
    drawIndices = 0;
 end
