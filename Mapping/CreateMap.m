@@ -1,12 +1,13 @@
 function [ triangles, points, traversableTriIndices, wallTriIndices, ...
-    sharedSides, boundaryPointIndices ] ...
-    = CreateMap( points, maxSideLength, minObstacleHeight, triangles )
+        sharedSides, boundaryPointIndices ] ...
+    = CreateMap( points, maxSideLength, minObstacleHeight, maxIncline, ...
+        triangles )
 %CREATEMAP Creates a map of the environment
 %   Generates a mesh (and accompanying components) based on the given set
 %   of points
 
 %Create a triangle mesh from the point cloud
-if nargin <= 3
+if nargin <= 4
     [triangles, points] = ConvertToMesh(points, maxSideLength);
 end
 
@@ -15,7 +16,7 @@ end
 % groundTriangles = classifiedTriangles(classifiedTriangles(:,4)==1,1:3);
 % traversableTriangles = [ groundTriangles; classifiedTriangles(classifiedTriangles(:,4)==2,1:3) ];
 % wallTriangles = classifiedTriangles(classifiedTriangles(:,4)==3,1:3);
-classifiedTriangles = ClassifyTriangles(triangles, points, 30);
+classifiedTriangles = ClassifyTriangles(triangles, points, maxIncline);
 indices = cumsum(ones(size(classifiedTriangles, 1), 1));
 traversableTriIndices = indices(classifiedTriangles(:,4) == 1);
 wallTriIndices = indices(classifiedTriangles(:,4) == 2);

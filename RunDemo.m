@@ -1,6 +1,21 @@
 
 hold off;
 
+%-Define environment interpretation constants
+%Largest triangle side length (for removing mesh cap)
+MaxSideLength = 0.65;
+%Smallest obstacle height to not be considered an artefact
+MinObstacleHeight = 0.03;
+
+%-Define robot constraint constants
+%Maximum traversable incline in degrees
+MaxIncline = 30;
+%Span of the robot wheel-base
+WheelSpan = 0.15;
+%Object avoidance radius for safe traversal
+CollisionRadius = 0.2;
+
+
 if ~exist('TestCase', 'var')
     warning('TestCase not defined; using default value:');
     TestCase = 2
@@ -31,7 +46,7 @@ switch TestCase
     case 1
         [Points, Triangles] = GenerateMock3DData1();
         [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
-                = CreateMap(Points, 0.65, 0.03, Triangles);
+                = CreateMap(Points, MaxSideLength, MinObstacleHeight, MaxIncline, Triangles);
         
         PathCoords = [  0.66, 0.33, 0.2;
                         1.5, 1.5, 0.2;
@@ -44,7 +59,7 @@ switch TestCase
 
         %Create a triangle mesh from the point cloud
         [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
-                = CreateMap(Points, 0.65, 0.03);
+                = CreateMap(Points, MaxSideLength, MinObstacleHeight, MaxIncline);
         
         PathCoords = [  1, -1, 0.2;
                         1.5, 1.5, 0.2;
@@ -59,7 +74,7 @@ switch TestCase
         
         %Create a triangle mesh from the point cloud
         [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
-                = CreateMap(Points, 0.65, 0.03);
+                = CreateMap(Points, MaxSideLength, MinObstacleHeight, MaxIncline);
         
         PathCoords = [  1, -1, 0.2;
                         -1, -1, 0.6;
@@ -90,8 +105,6 @@ PlotEdges(Edges, Waypoints, 'red');
 PlotWaypoints(Waypoints, 'red', false);
 
 %Validate the waypoints and edges based on possible obstruction by other triangles
-WheelSpan = 0.15;
-CollisionRadius = 0.2;
 [Waypoints, Edges, WaypointTriIndices] ...
     = ValidateNavigationGraph(WheelSpan, CollisionRadius, Waypoints, Edges, ...
     WaypointTriIndices, WallTriIndices, Triangles, Points);
