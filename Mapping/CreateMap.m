@@ -15,11 +15,10 @@ end
 % groundTriangles = classifiedTriangles(classifiedTriangles(:,4)==1,1:3);
 % traversableTriangles = [ groundTriangles; classifiedTriangles(classifiedTriangles(:,4)==2,1:3) ];
 % wallTriangles = classifiedTriangles(classifiedTriangles(:,4)==3,1:3);
-classifiedTriangles = ClassifyPolygons(triangles, points, 8, 30);
+classifiedTriangles = ClassifyTriangles(triangles, points, 30);
 indices = cumsum(ones(size(classifiedTriangles, 1), 1));
-groundTriIndices = indices(classifiedTriangles(:,4) == 1);
-traversableTriIndices = [ groundTriIndices; indices(classifiedTriangles(:,4) == 2) ];
-wallTriIndices = indices(classifiedTriangles(:,4) == 3);
+traversableTriIndices = indices(classifiedTriangles(:,4) == 1);
+wallTriIndices = indices(classifiedTriangles(:,4) == 2);
 
 %Remove walls that are too small (likely to be artefacts)
 wallTriIndices = wallTriIndices(max([ ...
