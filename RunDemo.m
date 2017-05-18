@@ -3,12 +3,12 @@ hold off;
 
 if ~exist('TestCase', 'var')
     warning('TestCase not defined; using default value:');
-    TestCase = 1
+    TestCase = 2
 end
 
 switch TestCase
     case 0
-        Use existing points and triangles
+        %Use existing points and triangles
         quit = false;
         if ~exist('Points', 'var')
             warning('Points matrix does not exist; create some points or set TestCase > 0');
@@ -30,6 +30,9 @@ switch TestCase
         
     case 1
         [Points, Triangles] = GenerateMock3DData1();
+        [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
+                = CreateMap(Points, 0.65, 0.03, Triangles);
+        
         PathCoords = [  0.66, 0.33, 0.2;
                         1.5, 1.5, 0.2;
                         ];
@@ -39,13 +42,9 @@ switch TestCase
         Points = GenerateMock3DData2();
         Points = AddNoise(Points, 0.003);
 
-        %Generate a closed mesh based on the point cloud
-        Triangles = MyRobustCrust(Points);
-        %Remove large triangles, which are typically capping a concave mesh
-        Triangles = CullTriangles(Triangles, Points, 0.6);
-
-        %Decimate the mesh to simplify the data
-        [Triangles, Points] = reducepatch(Triangles, Points, 300);
+        %Create a triangle mesh from the point cloud
+        [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
+                = CreateMap(Points, 0.65, 0.03);
         
         PathCoords = [  1, -1, 0.2;
                         1.5, 1.5, 0.2;
@@ -57,14 +56,10 @@ switch TestCase
         %Generate a point cloud
         Points = GenerateMock3DData3();
         Points = AddNoise(Points, 0.003);
-
-        %Generate a closed mesh based on the point cloud
-        Triangles = MyRobustCrust(Points);
-        %Remove large triangles, which are typically capping a concave mesh
-        Triangles = CullTriangles(Triangles, Points, 0.65);
-
-        %Decimate the mesh to simplify the data
-        [Triangles, Points] = reducepatch(Triangles, Points, 300);
+        
+        %Create a triangle mesh from the point cloud
+        [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
+                = CreateMap(Points, 0.65, 0.03);
         
         PathCoords = [  1, -1, 0.2;
                         -1, -1, 0.6;
@@ -72,33 +67,22 @@ switch TestCase
         
 end
 
-%Classify the triangles and sub-group them
-ClassifiedTriangles = ClassifyPolygons(Triangles, Points, 8, 30);
-GroundTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4)==1,1:3);
-TraversableTriangles = [ GroundTriangles; ClassifiedTriangles(ClassifiedTriangles(:,4)==2,1:3) ];
-
-%Remove walls that are too small (likely to be artefacts)
-MinObstacleHeight = 0.03;
-ClassifiedTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4) ~= 3 | max([ ...
-    abs(Points(ClassifiedTriangles(:,1),3)-Points(ClassifiedTriangles(:,2),3)), ...
-    abs(Points(ClassifiedTriangles(:,2),3)-Points(ClassifiedTriangles(:,3),3)), ...
-    abs(Points(ClassifiedTriangles(:,3),3)-Points(ClassifiedTriangles(:,1),3))], [], 2) ...
-        > MinObstacleHeight,1:4);
-%Extract walls
-WallTriangles = ClassifiedTriangles(ClassifiedTriangles(:,4)==3,1:3);
-
 %Plot the mesh
-PlotTriangles(ClassifiedTriangles, Points);
+PlotMesh(Triangles(TraversableTriIndices,:), Triangles(WallTriIndices,:), Points);
 hold on;
 
-%Find sides that are common to more than one triangle
-SharedSides = FindSharedSides(TraversableTriangles, Points);
+%DEBUG
+%PlotWaypoints(Points(BoundaryPointIndices,:), 'm', false);
+%PlotSharedSides(SharedSides, Triangles, Points);
+%END DEBUG
+
 %Draw links between triangles with shared sides
 %PlotSharedSides(SharedSides, TraversableTriangles, Points);
 
 %Place waypoints onto the mesh
 %Waypoints = PlaceWaypoints(TraversableTriangles, Points, SharedSides);
-[Waypoints, Edges, WaypointTriangles] = GenerateNavigationGraph(TraversableTriangles, Points, SharedSides);
+[Waypoints, Edges, WaypointTriIndices] ...
+    = GenerateNavigationGraph(TraversableTriIndices, Triangles, Points, SharedSides);
 
 %Plot the edges
 PlotEdges(Edges, Waypoints, 'red');
@@ -106,9 +90,11 @@ PlotEdges(Edges, Waypoints, 'red');
 PlotWaypoints(Waypoints, 'red', false);
 
 %Validate the waypoints and edges based on possible obstruction by other triangles
+WheelSpan = 0.15;
 CollisionRadius = 0.2;
-[Waypoints, Edges, WaypointTriangles] ...
-    = ValidateNavigationGraph(CollisionRadius, Waypoints, Edges, WaypointTriangles, SharedSides, WallTriangles, Points);
+[Waypoints, Edges, WaypointTriIndices] ...
+    = ValidateNavigationGraph(WheelSpan, CollisionRadius, Waypoints, Edges, ...
+    WaypointTriIndices, WallTriIndices, Triangles, Points);
 
 %Plot the edges
 PlotEdges(Edges, Waypoints, 'black');
