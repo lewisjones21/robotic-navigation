@@ -9,7 +9,7 @@ MinObstacleHeight = 0.03;
 
 %-Define robot constraint constants
 %Maximum traversable incline in degrees
-MaxIncline = 30;
+MaxIncline = 20;
 %Span of the robot wheel-base
 WheelSpan = 0.15;
 %Object avoidance radius for safe traversal
@@ -45,8 +45,10 @@ switch TestCase
         
     case 1
         [Points, Triangles] = GenerateMock3DData1();
-        [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
-                = CreateMap(Points, MaxSideLength, MinObstacleHeight, MaxIncline, Triangles);
+        [Triangles, Points, TraversableTriIndices, WallTriIndices, ...
+            SharedSides, BoundaryPointIndices, TriangleSlopes] ...
+                = CreateMap(Points, MaxSideLength, MinObstacleHeight, ...
+                    MaxIncline, Triangles);
         
         PathCoords = [  0.66, 0.33, 0.2;
                         1.5, 1.5, 0.2;
@@ -58,8 +60,10 @@ switch TestCase
         Points = AddNoise(Points, 0.003);
 
         %Create a triangle mesh from the point cloud
-        [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
-                = CreateMap(Points, MaxSideLength, MinObstacleHeight, MaxIncline);
+        [Triangles, Points, TraversableTriIndices, WallTriIndices, ...
+            SharedSides, BoundaryPointIndices, TriangleSlopes] ...
+                = CreateMap(Points, ...
+                    MaxSideLength, MinObstacleHeight, MaxIncline);
         
         PathCoords = [  1, -1, 0.2;
                         1.5, 1.5, 0.2;
@@ -73,8 +77,10 @@ switch TestCase
         Points = AddNoise(Points, 0.003);
         
         %Create a triangle mesh from the point cloud
-        [Triangles, Points, TraversableTriIndices, WallTriIndices, SharedSides, BoundaryPointIndices] ...
-                = CreateMap(Points, MaxSideLength, MinObstacleHeight, MaxIncline);
+        [Triangles, Points, TraversableTriIndices, WallTriIndices, ...
+            SharedSides, BoundaryPointIndices, TriangleSlopes] ...
+                = CreateMap(Points, ...
+                    MaxSideLength, MinObstacleHeight, MaxIncline);
         
         PathCoords = [  1, -1, 0.2;
                         -1, -1, 0.6;
@@ -83,7 +89,8 @@ switch TestCase
 end
 
 %Plot the mesh
-PlotMesh(Triangles(TraversableTriIndices,:), Triangles(WallTriIndices,:), Points);
+PlotMesh(TraversableTriIndices, WallTriIndices, Triangles, Points, ...
+    TriangleSlopes / MaxIncline);
 hold on;
 
 %DEBUG
@@ -117,6 +124,6 @@ PlotWaypoints(Waypoints, 'white', false);
 %Find a path through the navigation graph
 Path = FindPath(Waypoints, Edges, PathCoords);
 %Plot the path
-PlotNodes(PathCoords, 'y')
+PlotNodes(PathCoords, 'b')
 PlotPath(Waypoints(Path,:), 'm')
 

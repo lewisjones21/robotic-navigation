@@ -1,30 +1,45 @@
-function [] = PlotMesh(traversableTris, wallTris, points)
+function [] = PlotMesh(traversableTriIndices, wallTriIndices, triangles, points, triangleSlopes)
 %PLOTMESH Plots the environment mesh
 %   Plots the map of the environment, with walls in red and traversable
-%   areas in green through yellow based on slope
+%   areas in green through yellow based on slope (if given)
 
 savedhold = ishold;
 
-span = [ min(points(:,1)) max(points(:,1)) min(points(:,2)) max(points(:,2)) min(points(:,3)) max(points(:,3)) ];
+span = [ min(points(:,1)) max(points(:,1)) ...
+         min(points(:,2)) max(points(:,2)) ...
+         min(points(:,3)) max(points(:,3)) ];
 
 figure(1);
 
-colormap hsv;
+naughtToOne = 0:0.01:1;
+map = [naughtToOne', ones(101, 1), zeros(101, 1)];
+colormap(map);
+
+c = triangleSlopes;
 
 %Allow the first triangle to reset the figure if hold is off
-fill3(points(traversableTris(1,:),1), points(traversableTris(1,:),2), points(traversableTris(1,:),3), 'g');
+fill3(points(triangles(traversableTriIndices(1),:),1), ...
+        points(triangles(traversableTriIndices(1),:),2), ...
+        points(triangles(traversableTriIndices(1),:),3), ...
+        c(traversableTriIndices(1)));
+    
 hold on;
 %Plot the remainder of the traversable triangles
-for p = 2:size(traversableTris, 1)
+for t = 2:size(traversableTriIndices, 1)
 
-    fill3(points(traversableTris(p,:),1), points(traversableTris(p,:),2), points(traversableTris(p,:),3), 'g');
+    fill3(points(triangles(traversableTriIndices(t),:),1), ...
+        points(triangles(traversableTriIndices(t),:),2), ...
+        points(triangles(traversableTriIndices(t),:),3), ...
+        c(traversableTriIndices(t)));
 
 end
 
 %Plot the wall triangles
-for p = 1:size(wallTris, 1)
+for t = 1:size(wallTriIndices, 1)
 
-    fill3(points(wallTris(p,:),1), points(wallTris(p,:),2), points(wallTris(p,:),3), 'r');
+    fill3(points(triangles(wallTriIndices(t),:),1), ...
+        points(triangles(wallTriIndices(t),:),2), ...
+        points(triangles(wallTriIndices(t),:),3), 'r');
 
 end
 
