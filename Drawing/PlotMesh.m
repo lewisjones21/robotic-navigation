@@ -52,6 +52,7 @@ else
 end
 
 axis(span);
+axis equal;
 grid on;
 xlabel('x');
 ylabel('y');
