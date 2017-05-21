@@ -8,7 +8,12 @@ intersects = false;
 cRel2 = trianglePoints(2,:) - trianglePoints(1,:);
 cRel3 = trianglePoints(3,:) - trianglePoints(1,:);
 n = cross(cRel2, cRel3);
-n = n / norm(n);
+if (norm(n) > 0)
+    n = n / norm(n);
+else
+    warning('Triangle is a line; check the triangle definition');
+    return;
+end
 
 d = dot(centre - trianglePoints(1,:), n);
 
