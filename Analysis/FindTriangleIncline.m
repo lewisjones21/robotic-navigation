@@ -12,8 +12,11 @@ a = points(triangles(triangleIndex,2),:) - points(triangles(triangleIndex,1),:);
 b = points(triangles(triangleIndex,3),:) - points(triangles(triangleIndex,1),:);
 n = cross(a, b);
 
+%Account for upside-down triangles
+n(3) = abs(n(3));
+
 %Determine the incline from the normal
-if (abs(n(3)) > 0)
+if (n(3) > 0)
     incline = atan(sqrt(n(1) * n(1) + n(2) * n(2)) / n(3));
 else
     incline = pi / 2;
