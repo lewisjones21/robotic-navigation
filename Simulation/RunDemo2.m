@@ -1,19 +1,32 @@
 function [] = RunDemo1( MaxIncline, WheelSpan, CollisionRadius, Noise, ...
     MaxSideLength, MinObstacleHeight)
 %RUNDEMO2 Run a ramp demo
-%   Run a demonstration using a simple room with a ramp, with the given
-%   robot constraints - MaxIncline: Maximum traversable incline in degrees;
-%   WheelSpan: Span of the robot wheel-base; CollisionRadius: Object
-%   avoidance radius for safe traversal - noise added to the generated
-%   points (to create variability in resutls), and optional mapping
-%   validation parameters
+%   Run a demonstration using a simple room with a ramp.
+%
+%   Use the given robot constraints:
+%   -MaxIncline: Maximum traversable incline in degrees
+%   -WheelSpan: Span of the robot wheel-base
+%   -CollisionRadius: Object avoidance radius for safe traversal
+%   
+%   Use optional generation parameters:
+%   -Noise: standard deviation (metres) of noise to add to points prior to
+%       mesh generation
+%   
+%   Use optional mapping validation parameters:
+%   -MaxSideLength: Max side length of triangles in the triangulated mesh;
+%       by default, the generated mesh is closed by large triangles, which
+%       is unrealistic, so these are removed based on this parameter
+%   -MinObstacleHeight: Smallest obstacle/ wall height to not be considered
+%       an artefact
 
+%Set default values where necessary
 if nargin < 6
-    %Smallest obstacle/ wall height to not be considered an artefact
     MinObstacleHeight = 0.03;
     if nargin < 5
-        %Largest triangle side length (for removing mesh cap)
         MaxSideLength = 0.65;
+        if nargin < 4
+            Noise = 0.003;
+        end
     end
 end
 
