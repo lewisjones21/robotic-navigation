@@ -4,6 +4,10 @@ function [ points ] = AcquireKinect2PointCloud( downsample )
 %   connected to the computer and returns the depth information as an Nx3
 %   point cloud
 %
+%   +ve X ~ right
+%   +ve Y ~ forwards
+%   +ve Z ~ up
+%
 %   Code in this function uses the Kin2 toolbox as credited below and is
 %   adapted from the demos provided with the toolbox
 %
@@ -56,6 +60,13 @@ k2.delete;
 if nargin > 0
     points = points(1:downsample:size(points, 1),:);
 end
+
+%Remap the coordinate system to the one stated in the description
+points = [ -points(:,1), points(:,3), points(:,2) ];
+
+%Validate the obtained points
+points = points((isfinite(points(:,1)) & isfinite(points(:,2)) ...
+        & isfinite(points(:,3))),:);
 
 
 end

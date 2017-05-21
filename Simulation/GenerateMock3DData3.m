@@ -2,10 +2,10 @@ function [points] = GenerateMock3DData3()
 
 proximityTolerance = 0.001;
 
-left = 2;
-right = -2;
-back = -2;
-front = 2;
+left = -2;
+right = 2;
+back = 2;
+front = -2;
 bottom = 0;
 top = 2;
 
