@@ -1,4 +1,4 @@
-function [ waypointPath ] = FindPath( waypoints, edges, coords )
+function [ waypointPath, coordErrors ] = FindPath( waypoints, edges, coords )
 %FINDPATH Generates a path from the specified waypoint to the target
 %coordinates
 %   Generates a path through the provided navigation network that passes
@@ -14,12 +14,13 @@ end
 %If more than 2 coordinates are given, the path must pass through
 %intermediate points; routes for these are calculated recursively
 if size(coords, 1) > 2
-    priorWaypointPath = FindPath(waypoints, edges, coords(1:size(coords,1)-1,:));
+    [ priorWaypointPath, coordErrors ] = FindPath(waypoints, edges, coords(1:size(coords,1)-1,:));
     startCoords = coords(size(coords,1)-1,:);
     targetCoords = coords(size(coords,1),:);
 else
     if size(coords, 1) == 2
         priorWaypointPath = [];
+        coordErrors = [];
         startCoords = coords(1,:);
         targetCoords = coords(2,:);
     else
@@ -42,6 +43,11 @@ for i = 1:size(waypoints, 1)
         startWaypointIndex = i;
     end
 end
+%If this is the smallest sub-path in the coordinate chain, note the
+%distance of the start waypoint from the specified start position
+if size(priorWaypointPath, 1) == 0
+    coordErrors = [ coordErrors; sqrt(bestDist2) ];
+end
 
 %Find the target waypoint (the one closest to the target coordinates)
 targetWaypointIndex = 1;
@@ -55,8 +61,10 @@ for i = 1:size(waypoints, 1)
         targetWaypointIndex = i;
     end
 end
+%Tally how far the target waypoint is from the specified target position
+coordErrors = [ coordErrors; sqrt(bestDist2) ];
 
-%Precalculate the length of all edges
+%Precalculate the lengths of all edges
 edgeLengths = zeros(size(edges, 1), 1);
 for e = 1:size(edges, 1)
     edgeLengths(e) = norm(waypoints(edges(e,1),:) - waypoints(edges(e,2),:));

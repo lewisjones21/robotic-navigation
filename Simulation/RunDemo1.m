@@ -27,10 +27,12 @@ end
 
 %Define a test path
 PathCoords = [  0.66, 0.33, 0.2;
+                0.5, 1.5, 0.1;
                 1.5, 1.5, 0.2;
                 ];
 
 %Plot the mesh
+hold off;
 PlotMesh(TraversableTriIndices, WallTriIndices, Triangles, Points, ...
     TriangleSlopes / MaxIncline);
 hold on;
@@ -49,9 +51,9 @@ hold on;
         WallTriIndices, Triangles, Points);
 
 %Plot the full set of edges
-PlotEdges(Edges, Waypoints, 'red');
+PlotEdges(AllEdges, AllWaypoints, 'red');
 %Plot the full set of waypoints
-PlotWaypoints(Waypoints, 'red', false);
+PlotWaypoints(AllWaypoints, 'red', false);
 
 %Plot the valid edges
 PlotEdges(Edges, Waypoints, 'black');
@@ -59,10 +61,19 @@ PlotEdges(Edges, Waypoints, 'black');
 PlotWaypoints(Waypoints, 'white', false);
 
 %Find a path through the navigation graph
-Path = FindPath(Waypoints, Edges, PathCoords);
+[Path CoordErrors] = FindPath(Waypoints, Edges, PathCoords);
+
+CoordErrors
+
 %Plot the path
 PlotNodes(PathCoords, 'blue')
 PlotPath(Waypoints(Path,:), 'magenta')
+
+%Analyse the path that was found
+[PathLength, PathHeightGain, MaxIncline, MaxInclineChange, ...
+    DirectDistance, FactorAboveDirect] ...
+        = AnalysePath(Path, Waypoints, WaypointTriIndices, ...
+            Triangles, Points, PathCoords)
 
 end
 
