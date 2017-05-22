@@ -13,9 +13,9 @@ width = right - left;
 depth = front - back;
 height = top - bottom;
 
-xDensity = 32;%16;
-yDensity = 32;%16;
-zDensity = 16;%8;
+xDensity = 16;
+yDensity = 16;
+zDensity = 8;
 
 points = [];
 

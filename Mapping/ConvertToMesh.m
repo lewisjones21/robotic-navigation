@@ -11,7 +11,7 @@ triangles = MyRobustCrust(points);
 triangles = CullTriangles(triangles, points, maxsidelength);
 
 %Decimate the mesh to simplify the data
-[triangles, points] = reducepatch(triangles, points, 300);
+[triangles, points] = reducepatch(triangles, points, 0.07);%300);
 
 
 end

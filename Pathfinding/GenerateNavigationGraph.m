@@ -1,5 +1,6 @@
 function [ waypoints, edges, waypointTriIndices ] ...
-    = GenerateNavigationGraph(traversableTriIndices, triangles, points, sharedSides)
+    = GenerateNavigationGraph(traversableTriIndices, triangles, points, ...
+        sharedSides)
 %GENERATENAVIGATIONGRAPH Places waypoints on the triangles in relevant places
 %   Places waypoints across the mesh defined by the triangles such that they
 %   cover the traversable area to a suitable spatial resolution. Also
@@ -51,14 +52,34 @@ if nargin > 3
         edgeNumber = 1;
         for i = sideWaypointIndex:size(waypointTriIndices, 1)
 
-            edges(edgeNumber,:) = [ waypointTriIndices(i, 1), i ];
+            edges(edgeNumber,:) = [ waypointTriIndices(i,1), i ];
             edgeNumber = edgeNumber + 1;
-            edges(edgeNumber,:) = [ waypointTriIndices(i, 2), i ];
+            edges(edgeNumber,:) = [ waypointTriIndices(i,2), i ];
             edgeNumber = edgeNumber + 1;
 
         end 
     end
     
 end
+
+%Create edges between each side of each relevant triangle
+for w1 = sideWaypointIndex:size(waypointTriIndices, 1)
+    for w2 = sideWaypointIndex+1:size(waypointTriIndices, 1)
+        
+        %If these waypoints have a triangle in common
+        if waypointTriIndices(w1,1) == waypointTriIndices(w2,1) ...
+            || waypointTriIndices(w1,1) == waypointTriIndices(w2,2) ...
+            || waypointTriIndices(w1,2) == waypointTriIndices(w2,1) ...
+            || waypointTriIndices(w1,2) == waypointTriIndices(w2,2)
+            
+            %Link them
+            edges(edgeNumber,:) = [ w1, w2 ];
+            edgeNumber = edgeNumber + 1;
+            
+        end
+        
+    end
+end
+
 
 end
