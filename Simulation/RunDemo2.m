@@ -56,7 +56,8 @@ hold on;
 
 %Place waypoints onto the mesh
 [AllWaypoints, AllEdges, AllWaypointTriIndices] ...
-    = GenerateNavigationGraph(TraversableTriIndices, Triangles, Points, SharedSides);
+    = GenerateNavigationGraph(TraversableTriIndices, Triangles, Points, ...
+        SharedSides, WheelSpan * 8);
 
 %Find the subset of waypoints and edges that are valid for the given robot
 %constraints, based on possible obstruction by walls; in other demos, this
