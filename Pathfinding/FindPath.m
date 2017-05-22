@@ -6,6 +6,7 @@ function [ waypointPath, coordErrors ] = FindPath( waypoints, edges, coords )
 
 
 waypointPath = [];
+coordErrors = [];
 
 if size(waypoints, 1) <= 0 || size(edges, 1) <= 0 || size(coords, 1) <= 0
     return;

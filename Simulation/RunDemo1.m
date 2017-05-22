@@ -68,11 +68,11 @@ PlotWaypoints(Waypoints, 'white', false);
 %Find a path through the navigation graph
 [Path CoordErrors] = FindPath(Waypoints, Edges, PathCoords);
 
-CoordErrors
-
 %Plot the path
 PlotNodes(PathCoords, 'blue')
 PlotPath(Waypoints(Path,:), 'magenta')
+
+CoordErrors
 
 %Analyse the path that was found
 [PathLength, PathHeightGain, MaxIncline, MaxInclineChange, ...
