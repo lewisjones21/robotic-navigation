@@ -1,6 +1,7 @@
 function [] = PlotSharedSides( sharedSides, triangles, points )
 %PLOTSHAREDSIDES Draws lines between triangles with shared sides
-%   Draws a plot similar to the Voronoi tessellation
+%   Draws a plot similar to the Voronoi tessellation; generally used for
+%   debugging
 
 %Validate the inputs
 if size(points, 1) <= 0
@@ -32,12 +33,9 @@ savedhold = ishold;
 
 figure(1);
 
-%As a test, first just highlight shared sides
-%XYZ = [ points(sharedSides(:,3),:) points(sharedSides(:,4),:) ];
-
 %Find the relevant triangle vertices
-firstTriangleIndices = sharedSides(:,1);
-secondTriangleIndices = sharedSides(:,2);
+firstTriangleIndices = sharedSides(:,3);
+secondTriangleIndices = sharedSides(:,4);
 firstTrianglesVertexIndices = triangles(firstTriangleIndices,:);
 secondTrianglesVertexIndices = triangles(secondTriangleIndices,:);
 firstTriangleCentres = (points(firstTrianglesVertexIndices(:,1),:) ...

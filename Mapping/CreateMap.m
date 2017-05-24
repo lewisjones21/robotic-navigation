@@ -43,15 +43,46 @@ if size(triangles, 1) <= 0
     return;
 end
 
+maxInclineRads = maxIncline * pi / 180;
+
 %Classify the triangles and find subsets of their indices representing
 %traversable areas and walls 
 triangleInclines = FindTriangleInclines(triangles, points);
 % [classifiedTriangles, triangleSlopes] ...
 %     = ClassifyTriangles(triangles, points, maxIncline);
 indices = cumsum(ones(size(triangles, 1), 1));
-traversable = (triangleInclines <= maxIncline * pi / 180);
+traversable = (triangleInclines <= maxInclineRads);
 traversableTriIndices = indices(traversable);
 wallTriIndices = indices(~traversable);
+
+%sharedSides = FindSharedSides(triangles, points);
+
+%Find sides that are on the boundary of the mesh
+[boundarySides, sharedSides] = FindSideTypes(triangles, points);
+
+%Find points that are on the boundary of the mesh
+boundaryPointIndices = [ boundarySides(:,1); boundarySides(:,2) ];
+boundaryPointIndices = unique(boundaryPointIndices);
+
+traversableSharedSides ...
+    = sharedSides((triangleInclines(sharedSides(:,3)) ...
+                                            <= maxInclineRads) ...
+                & (triangleInclines(sharedSides(:,4)) ...
+                                            <= maxInclineRads), :);
+
+% if size(traversableTriIndices, 1) > 0
+%     %Find sides that are common to more than one traversable triangle
+%     traversableSharedSides ...
+%         = FindSharedSides(triangles(traversableTriIndices,:), points);
+%     %Remap the triangle indices of this subset of shared sides; currently they
+%     %index the array of traversable triangles - they should index the global
+%     %array of triangles
+%     traversableSharedSides(:,1) ...
+%         = traversableTriIndices(traversableSharedSides(:,1));
+%     traversableSharedSides(:,2) ...
+%         = traversableTriIndices(traversableSharedSides(:,2));
+% end
+
 
 if size(wallTriIndices, 1) > 0
     %Remove walls that are too small (likely to be artefacts)
@@ -65,24 +96,6 @@ if size(wallTriIndices, 1) > 0
             >= minObstacleHeight);
 end
 
-%Find sides that are common to more than one triangle
-[sharedSides] = FindSharedSides(triangles, points);
-
-%Find points that are on the boundary of the mesh
-[boundaryPointIndices] = FindBoundaryPoints(points, sharedSides);
-
-if size(traversableTriIndices, 1) > 0
-    %Find sides that are common to more than one traversable triangle
-    [traversableSharedSides] ...
-        = FindSharedSides(triangles(traversableTriIndices,:), points);
-    %Remap the triangle indices of this subset of shared sides; currently they
-    %index the array of traversable triangles - they should index the global
-    %array of triangles
-    traversableSharedSides(:,1) ...
-        = traversableTriIndices(traversableSharedSides(:,1));
-    traversableSharedSides(:,2) ...
-        = traversableTriIndices(traversableSharedSides(:,2));
-end
 
 end
 

@@ -24,7 +24,7 @@ for p = 2:size(pathWaypoints, 1)
             set(handle, 'XData', robotPosition(1), ...
                         'YData', robotPosition(2), ...
                         'ZData', robotPosition(3));
-            pause(0.1);
+            pause(0.02);
         end
     end
 end

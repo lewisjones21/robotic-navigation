@@ -31,7 +31,7 @@ for t1 = 1:size(triangles, 1)
         for p1 = 1:3
             for p2 = 1:3
                 
-                if points(triangles(t1,p1),:) == points(triangles(t2,p2),:) ...
+                if points(triangles(t1,p1),:) == points(triangles(t2,p2),:)
                     %Triangles t1 and t2 share a point
                     if points(triangles(t1,mod(p1+1-1,3)+1),:) == points(triangles(t2,mod(p2+1-1,3)+1),:)
                         %They share another point in the same indexing direction
