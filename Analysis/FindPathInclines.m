@@ -56,7 +56,7 @@ end
 
 %Find the inclines of all primary triangles in the 
 pathTriangleInclines ...
-    = triangleInclines(waypointTriIndices(pathWaypointIndices,1))
+    = triangleInclines(waypointTriIndices(pathWaypointIndices,1));
 
 %Find the maximum incline
 maxIncline = max(pathTriangleInclines);
@@ -71,12 +71,12 @@ if waypointTriIndices(pathWaypointIndices(size(pathWaypointIndices,1)),2) > 0
     %The first waypoint is on a sharedSide
     maxIncline = max(maxIncline, FindTriangleInclines( ...
         triangles(waypointTriIndices(pathWaypointIndices( ...
-            size(pathWaypointIndices,1)),2),:), points));
+            size(pathWaypointIndices,1)),1),:), points));
 end
 
 %Find the direction vector of each path segment
-d = waypoints(pathWaypointIndices(2:size(pathWaypointIndices, 2)), :) ...
-    - waypoints(pathWaypointIndices(1:size(pathWaypointIndices, 2)-1), :);
+d = waypoints(pathWaypointIndices(2:size(pathWaypointIndices,1)), :) ...
+    - waypoints(pathWaypointIndices(1:size(pathWaypointIndices,1)-1), :);
 %Find the angle between each direction vector and the horizontal plane
 angles = atan2(d(:,3), sqrt(d(:,1).^2 + d(:,2).^2));
 %atan2 effectively handles vertical path segments (although these shouldn't
@@ -86,7 +86,7 @@ angles = atan2(d(:,3), sqrt(d(:,1).^2 + d(:,2).^2));
 maxFacedIncline = max(angles);
 
 %Find the changes in angle between path segments
-angleDeltas = angles(2:size(angles, 1)) - angles(1:size(angles, 1) - 1);
+angleDeltas = angles(2:size(angles, 1)) - angles(1:size(angles,1) - 1);
 
 %Find the maximum trough angle (positive change in slope: _/ or \/ shape)
 maxTroughAngle = max(angleDeltas);

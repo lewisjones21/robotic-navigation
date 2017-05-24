@@ -45,6 +45,14 @@ if size(triangles, 2) ~= 3
     warning('Triangles given in incorrect format');
     return;
 end
+if size(waypointTriIndices, 1) ~= size(waypoints, 1)
+    warning('Incorrect number of waypoint triangle indices given');
+    return;
+end
+if size(waypointTriIndices, 2) ~= 2
+    warning('Waypoint triangle indices given in incorrect format');
+    return;
+end
 
 waypointIndexMap = zeros(size(waypoints, 1), 1);
 

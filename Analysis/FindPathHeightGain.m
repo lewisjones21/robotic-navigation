@@ -4,13 +4,15 @@ function [ pathHeightGain ] = FindPathHeightGain( pathWaypoints )
 %   net change in height) - upwards moving segments contribute positively;
 %   downward moving segments do not contribute
 
+%Default the output
 pathHeightGain = [];
 
+%Validate inputs
 if size(pathWaypoints, 1) <= 0
     warning('No path waypoints given');
     return;
 end
-if size(pathWaypoints, 1) ~= 3
+if size(pathWaypoints, 2) ~= 3
     warning('Path waypoints not given in correct form');
     return;
 end

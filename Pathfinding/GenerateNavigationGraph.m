@@ -36,6 +36,14 @@ if size(triangles, 2) ~= 3
     warning('Triangles given in incorrect format');
     return;
 end
+if size(traversableTriIndices, 1) <= 0
+    warning('No traversable triangle indices given');
+    return;
+end
+if size(traversableTriIndices, 2) ~= 1
+    warning('Traversable triangle indices given in incorrect format');
+    return;
+end
 
 
 traversableTriangles = triangles(traversableTriIndices,:);

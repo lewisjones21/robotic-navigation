@@ -119,7 +119,7 @@ else
     while iteration < maxIterations
 
         %Add the current waypoint to the path
-        pathWaypointIndices = [pathWaypointIndices, currentWaypoint];
+        pathWaypointIndices = [pathWaypointIndices; currentWaypoint];
 
         if currentWaypoint == startWaypointIndex
             break;
@@ -135,11 +135,11 @@ else
 end
 
 %Prepend the path calculated for previous intermediate coordinates
-pathWaypointIndices = [ priorWaypointPath, pathWaypointIndices ];
+pathWaypointIndices = [ priorWaypointPath; pathWaypointIndices ];
 
 %Remove the path waypoints that are repeated at the end of each segment
-repetitionIndices = [(pathWaypointIndices(1:size(pathWaypointIndices,2)-1) ...
-    - pathWaypointIndices(2:size(pathWaypointIndices,2)) == 0), 0];
+repetitionIndices = [(pathWaypointIndices(1:size(pathWaypointIndices,1)-1) ...
+    - pathWaypointIndices(2:size(pathWaypointIndices,1)) == 0); 0];
 pathWaypointIndices = pathWaypointIndices(~repetitionIndices);
 
 
