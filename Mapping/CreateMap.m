@@ -8,6 +8,7 @@ function [ triangles, points, traversableTriIndices, wallTriIndices, ...
 %   of points
 
 %Default the relevant outputs
+triangles = [];
 traversableTriIndices = [];
 wallTriIndices = [];
 sharedSides = [];

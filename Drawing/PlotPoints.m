@@ -1,4 +1,4 @@
-function [] = PlotPoints(points, drawIndices)
+function [] = PlotPoints(points, colour, drawIndices)
 %PLOTPOINTS Draws the given points
 %   Plots the given point cloud, colour-coded by depth
 
@@ -12,7 +12,7 @@ if size(points, 2) ~= 3
     return;
 end
 
-if nargin < 2
+if nargin < 3
 	drawIndices = 0;
 end
 
@@ -22,12 +22,15 @@ figure(1);
 
 span = [ min(points(:,1)) max(points(:,1)) min(points(:,2)) max(points(:,2)) min(points(:,3)) max(points(:,3)) ];
 
-colormap hsv;
-maxDepth = max(points(:,3));
-colours = points(:,3)/maxDepth;
-%colours = [ points(:,3)/maxDepth, maxDepth + 1 - points(:,3)/maxDepth,  ones(size(points,1),1) ];
 
-scatter3(points(:,1), points(:,2), points(:,3), 1, colours)
+if nargin < 2
+    colormap hsv;
+    maxDepth = max(points(:,3));
+    colour = points(:,3)/maxDepth;
+end
+%colour = [ points(:,3)/maxDepth, maxDepth + 1 - points(:,3)/maxDepth,  ones(size(points,1),1) ];
+
+scatter3(points(:,1), points(:,2), points(:,3), 1, colour)
 
 if drawIndices
     a = [1:size(points, 1)]'; b = num2str(a); c = cellstr(b);

@@ -18,11 +18,10 @@ if factor <= 0
     return;
 end
 
-N = floor(size(points,2) * factor);
+N = floor(size(points, 1) * factor);
 
-for i = 1:N
-    randomVal = randi(size(points,2) - 1) + 1;
-    points(:, randomVal) = [];
-end
+randomValues = floor((size(points, 1) - 1) .* rand(N, 1) + 1);
+points(randomValues, :) = [];
+
 
 end
