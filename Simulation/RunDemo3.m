@@ -1,5 +1,5 @@
 function [] = RunDemo3( MaxIncline, WheelSpan, CollisionRadius, Noise, ...
-    MaxSideLength, MinObstacleHeight)
+    MeshDecimationFraction, MaxSideLength, MinObstacleHeight)
 %RUNDEMO3 Run a table demo
 %   Run a demonstration using a simple room with a table.
 %
@@ -11,6 +11,8 @@ function [] = RunDemo3( MaxIncline, WheelSpan, CollisionRadius, Noise, ...
 %   Use optional generation parameters:
 %   -Noise: standard deviation (metres) of noise to add to points prior to
 %       mesh generation
+%   -MeshDecimationFraction: the fraction of the original number of
+%       triangles to which the mesh triangle count should be reduced
 %   
 %   Use optional mapping validation parameters:
 %   -MaxSideLength: Max side length of triangles in the triangulated mesh;
@@ -19,13 +21,17 @@ function [] = RunDemo3( MaxIncline, WheelSpan, CollisionRadius, Noise, ...
 %   -MinObstacleHeight: Smallest obstacle/ wall height to not be considered
 %       an artefact
 
+
 %Set default values where necessary
-if nargin < 6
+if nargin < 7
     MinObstacleHeight = 0.03;
-    if nargin < 5
+    if nargin < 6
         MaxSideLength = 0.65;
-        if nargin < 4
-            Noise = 0.003;
+        if nargin < 5
+            MeshDecimationFraction = 0.15;
+            if nargin < 4
+                Noise = 0.003;
+            end
         end
     end
 end
@@ -39,8 +45,8 @@ Points = AddNoise(Points, Noise);
 [Triangles, Points, TraversableTriIndices, WallTriIndices, ...
     SharedSides, TraversableSharedSides, BoundaryPointIndices, ...
     TriangleInclines] ...
-        = CreateMap(Points, MaxSideLength, MinObstacleHeight, ...
-            MaxIncline);
+        = CreateMap(MaxIncline, MeshDecimationFraction, MaxSideLength, ...
+            MinObstacleHeight, Points);
 
 %Define a test path
 PathCoords = [  -1, 0, 0.2;

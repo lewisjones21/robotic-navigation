@@ -2,11 +2,13 @@ function [] = RunDemo1( MaxIncline, WheelSpan, CollisionRadius, ...
     MaxSideLength, MinObstacleHeight)
 %RUNDEMO1 Run a basic demo
 %   Run a demonstration using a small test grid of points.
+%
 %   Use the given robot constraints:
 %   -MaxIncline: Maximum traversable incline in degrees
 %   -WheelSpan: Span of the robot wheel-base
 %   -CollisionRadius: Object avoidance radius for safe traversal
-%   and optional mapping validation parameters:
+%   
+%   Use optional mapping validation parameters:
 %   -MaxSideLength: Max side length of triangles in the triangulated mesh;
 %       by default, the generated mesh is closed by large triangles, which
 %       is unrealistic, so these are removed based on this parameter
@@ -20,6 +22,7 @@ if nargin < 5
         MaxSideLength = 0.65;
     end
 end
+MeshDecimationFraction = 0;%Special case indicating no decimation
 
 %Generate the test data
 [Points, Triangles] = GenerateMock3DData1();
@@ -28,8 +31,8 @@ end
 [Triangles, Points, TraversableTriIndices, WallTriIndices, ...
     SharedSides, TraversableSharedSides, BoundaryPointIndices, ...
     TriangleInclines] ...
-        = CreateMap(Points, MaxSideLength, MinObstacleHeight, ...
-            MaxIncline, Triangles);
+        = CreateMap(MaxIncline, MeshDecimationFraction, MaxSideLength, ...
+            MinObstacleHeight, Points, Triangles);
 
 %Define a test path
 PathCoords = [  0.66, 0.33, 0.2;
