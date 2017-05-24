@@ -1,11 +1,11 @@
 function [ waypoints, edges, waypointTriIndices ] ...
     = GenerateNavigationGraph(traversableTriIndices, triangles, points, ...
-        travSharedSides, doubleWaypointLength)
+        travSharedSides, spacingFactor)
 %GENERATENAVIGATIONGRAPH Places waypoints on the triangles in relevant places
 %	Places waypoints across the mesh defined by the triangles such that they
 %	cover the traversable area to a suitable spatial resolution. Also
 %	defines traversable edges between the waypoints.
-%	doubleWaypointLength indicates how long a travSharedSide must be for more
+%	spacingFactor indicates how long a travSharedSide must be for more
 %	than one waypoint to be placed on it
 
 %	waypoints is a list of (X, Y, Z) coordinate triplets
@@ -85,7 +85,7 @@ if nargin > 3
             %waypoints
             longIndices = cumsum(ones(size(travSharedSides, 1), 1));
             longIndices = longIndices(sqrt(sum(abs(points(travSharedSides(:,1),:) ...
-                - points(travSharedSides(:,2),:)).^2, 2)) > doubleWaypointLength);
+                - points(travSharedSides(:,2),:)).^2, 2)) > spacingFactor);
 
             %Place waypoints at the quarter-points of each shared side that
             %has sufficient length

@@ -19,9 +19,9 @@ if factor <= 0
 end
 
 N = floor(size(points, 1) * factor);
+randomIndices = randperm(size(points, 1));
 
-randomValues = floor((size(points, 1) - 1) .* rand(N, 1) + 1);
-points(randomValues, :) = [];
+points(randomIndices(1:N), :) = [];
 
 
 end

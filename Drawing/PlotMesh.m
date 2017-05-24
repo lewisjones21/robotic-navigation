@@ -35,8 +35,13 @@ naughtToOne = 0:0.01:1;
 map = [naughtToOne', ones(101, 1), zeros(101, 1)];
 colormap(map);
 caxis([0 1]);
+    
+if nargin >= 5
+    c = [ triangleSlopes; 1];
+else
+    c = zeros(size(triangles, 1), 1);
+end
 
-c = [ triangleSlopes; 1];
 
 if size(traversableTriIndices, 1) > 0
     %Allow the first triangle to reset the figure if hold is off
