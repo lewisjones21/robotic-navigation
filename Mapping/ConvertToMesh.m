@@ -6,11 +6,16 @@ function [ triangles, points ] = ConvertToMesh( points, ...
 %   p3]), removes invalid triangles (assuming an open manifold mesh, with
 %   maximum triangle side length as given), and simplifies the mesh
 
-
+%Default the relevant outputs
 triangles = [];
 
+%Validate the inputs
 if size(points, 1) <= 0
     warning('No points given');
+    return;
+end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
     return;
 end
 

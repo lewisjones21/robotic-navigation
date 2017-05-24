@@ -1,5 +1,5 @@
 function [ startAngle, distances, turnAngles ] ...
-    = WriteInstructions( path, waypoints, filename )
+    = WriteInstructions( pathWaypointIndices, waypoints, filename )
 %WRITEINSTRUCTIONS Outputs verbal navigation instructions
 %   Outputs verbal instructions describing how to follow the given 
 %   navigation path; if a filename is given, the instructions are also
@@ -7,14 +7,33 @@ function [ startAngle, distances, turnAngles ] ...
 %   to travel between waypoints and angles to turn at each intersection
 %   (measured clockwise; turning right)
 
+%Validate the inputs
+if size(waypoints, 1) <= 0
+    warning('No waypoints given');
+    return;
+end
+if size(waypoints, 2) ~= 3
+    warning('Waypoints given in incorrect format');
+    return;
+end
+if size(pathWaypointIndices, 1) <= 0
+    warning('No path waypoint indices given');
+    return;
+end
+if size(pathWaypointIndices, 1) ~= 1
+    warning('Path waypoint indices given in incorrect format');
+    return;
+end
+
 
 %Extract the relevant waypoints
-pathWaypoints = waypoints(path);
+pathWaypoints = waypoints(pathWaypointIndices);
 
 %Formulate waypoints into instructions
 numPoints = size(path, 2);
 
-differences = waypoints(path(2:numPoints),:) - waypoints(path(1:numPoints-1),:);
+differences = waypoints(path(2:numPoints),:) ...
+    - waypoints(path(1:numPoints-1),:);
 
 distances = sqrt(sum(differences.^2,2));
 directions = atan2(differences(:,1), differences(:,2)) * 180 / pi;
@@ -24,11 +43,8 @@ startDir = directions(1);
 turnAngles = directions(2:numPoints-1,:) - directions(1:numPoints-2,:);
 turnAngles = [ turnAngles; 0 ];
 
-% turnAngles = sum(abs(differences(1:numPoints-2,:) .* differences(2:numPoints-1,:)), 2);
-% turnAngles = acos(abs(turnAngles(:)) ./ norm(turnAngles(:))) * 180 / pi;
-% turnAngles = [ turnAngles; 0 ];
-
-turnDirRightIndices = cross(differences(1:numPoints-2,:), differences(2:numPoints-1,:));
+turnDirRightIndices = cross(differences(1:numPoints-2,:), ...
+                            differences(2:numPoints-1,:));
 turnDirRightIndices = (turnDirRightIndices(:,3) < 0);
 
 turnDirs = cell(numPoints - 1,1);

@@ -10,6 +10,18 @@ if size(pathWaypoints, 1) <= 0
     warning('No path waypoints given');
     return;
 end
+if size(pathWaypoints, 1) ~= 3
+    warning('Path waypoints not given in correct form');
+    return;
+end
+
+%Check there are at least two waypoints, otherwise a height difference
+%can't be found
+if size(pathWaypoints, 1) <= 1
+    pathHeightGain = 0;
+    warning('Only one path waypoints given');
+    return;
+end
 
 %For N points in pathWaypoints:
 %Take the sum of the (N-1) values, where each value is the maximum of zero

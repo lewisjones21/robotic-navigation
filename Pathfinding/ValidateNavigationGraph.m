@@ -7,10 +7,46 @@ function [ validWaypoints, validEdges, validWaypointTriIndices ] ...
 %   Returns the areas in the navigation graph that do not intersect walls
 %   using the collision radius given
 
-waypointIndexMap = zeros(size(waypoints, 1), 1);
-% validWaypoints = [];
+%Default the relevant outputs
+validWaypoints = [];
 validEdges = [];
-% validWaypointTriIndices = [];
+validWaypointTriIndices = [];
+
+%Validate the inputs
+if size(waypoints, 1) <= 0
+    warning('No waypoints given');
+    return;
+end
+if size(waypoints, 2) ~= 3
+    warning('Waypoints given in incorrect format');
+    return;
+end
+if size(edges, 1) <= 0
+    warning('No edges given');
+    return;
+end
+if size(edges, 2) ~= 2
+    warning('Edges given in incorrect format');
+    return;
+end
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+if size(triangles, 2) ~= 3
+    warning('Triangles given in incorrect format');
+    return;
+end
+
+waypointIndexMap = zeros(size(waypoints, 1), 1);
 
 %wheelSpanRadiusSquared = (wheelSpan * 0.5) ^ 2;
 

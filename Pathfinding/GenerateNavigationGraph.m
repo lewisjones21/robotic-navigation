@@ -14,13 +14,26 @@ function [ waypoints, edges, waypointTriIndices ] ...
 %	which the waypoints coincide with; for waypoints lying on just one
 %	triangle, T2 = -1
 
+%Default the relevant outputs
+waypoints = [];
+edges = [];
+waypointTriIndices = [];
 
+%Validate the inputs
 if size(points, 1) <= 0
     warning('No points given');
     return;
 end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
+    return;
+end
 if size(triangles, 1) <= 0
     warning('No triangles given');
+    return;
+end
+if size(triangles, 2) ~= 3
+    warning('Triangles given in incorrect format');
     return;
 end
 

@@ -1,9 +1,21 @@
 function [] = PlotNodes(nodes, colour)
+%PLOTNODES Plots the nodes as large markers
+%   
 
+%Validate the inputs
 if size(nodes, 1) <= 0
     warning('No nodes given');
     return;
 end
+if size(nodes, 2) ~= 3
+    warning('Nodes given in incorrect format');
+    return;
+end
+
+if nargin < 2
+    colour = 'blue';
+end
+
 savedhold = ishold;
 
 figure(1);

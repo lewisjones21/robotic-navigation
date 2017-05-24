@@ -2,13 +2,21 @@ function [] = PlotWaypoints(waypoints, colour, drawIndices)
 %PLOTWAYPOINTS Draws the given waypoints
 %   
 
-
+%Validate the inputs
 if size(waypoints, 1) <= 0
     warning('No waypoints given');
     return;
 end
-if nargin < 2
-   drawIndices = 0;
+if size(waypoints, 2) ~= 3
+    warning('Waypoints given in incorrect format');
+    return;
+end
+
+if nargin < 3
+    drawIndices = 0;
+    if nargin < 2
+        colour = 'white';
+    end
 end
 
 savedhold = ishold;

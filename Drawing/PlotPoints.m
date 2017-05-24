@@ -2,12 +2,18 @@ function [] = PlotPoints(points, drawIndices)
 %PLOTPOINTS Draws the given points
 %   Plots the given point cloud, colour-coded by depth
 
+%Validate the inputs
 if size(points, 1) <= 0
     warning('No points given');
     return;
 end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
+    return;
+end
+
 if nargin < 2
-   drawIndices = 0;
+	drawIndices = 0;
 end
 
 savedhold = ishold;

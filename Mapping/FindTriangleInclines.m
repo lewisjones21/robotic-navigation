@@ -5,14 +5,24 @@ function [ inclines ] = FindTriangleInclines( triangles, points )
 %   Points should be presented of rows containing triplets of spatial
 %   coordinates
 
+%Default the output
 inclines = [];
 
+%Validate the inputs
 if size(points, 1) <= 0
     warning('No points given');
     return;
 end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
+    return;
+end
 if size(triangles, 1) <= 0
     warning('No triangles given');
+    return;
+end
+if size(triangles, 2) ~= 3
+    warning('Triangles given in incorrect format');
     return;
 end
 

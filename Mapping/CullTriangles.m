@@ -3,6 +3,24 @@ function [ triangles ] = CullTriangles( triangles, points, maxsidelength, minsid
 %   Removes triangles from the input list that are too large to be valid
 %   parts of the tessellation
 
+%Validate the inputs
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+if size(triangles, 2) ~= 3
+    warning('Triangles given in incorrect format');
+    return;
+end
+
 if nargin < 4
     minsidelength = 0;
 end

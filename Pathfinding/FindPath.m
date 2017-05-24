@@ -4,11 +4,33 @@ function [ pathWaypointIndices, coordErrors ] = FindPath( waypoints, edges, coor
 %   Generates a path through the provided navigation network that passes
 %   through the closest waypoints to the given coordinates
 
-
+%Default the relevant outputs
 pathWaypointIndices = [];
 coordErrors = [];
 
-if size(waypoints, 1) <= 0 || size(edges, 1) <= 0 || size(coords, 1) <= 0
+%Validate the inputs
+if size(waypoints, 1) <= 0
+    warning('No waypoints given');
+    return;
+end
+if size(waypoints, 2) ~= 3
+    warning('Waypoints given in incorrect format');
+    return;
+end
+if size(edges, 1) <= 0
+    warning('No edges given');
+    return;
+end
+if size(edges, 2) ~= 2
+    warning('Edges given in incorrect format');
+    return;
+end
+if size(coords, 1) <= 0
+    warning('No coords given');
+    return;
+end
+if size(coords, 2) ~= 3
+    warning('Coords given in incorrect format');
     return;
 end
 

@@ -7,24 +7,37 @@ function [ triangles, points, traversableTriIndices, wallTriIndices, ...
 %   Generates a mesh (and accompanying components) based on the given set
 %   of points
 
+%Default the relevant outputs
 traversableTriIndices = [];
 wallTriIndices = [];
 sharedSides = [];
 traversableSharedSides = [];
 boundaryPointIndices = [];
 
+%Validate the inputs
 if size(points, 1) <= 0
     warning('No points given');
+    return;
+end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
     return;
 end
 
 %Create a triangle mesh from the point cloud, unless triangles are already
 %given
-if nargin <= 5
+if nargin <= 5 || size(triangles, 1) <= 0
     [triangles, points] = ConvertToMesh(points, ...
         maxSideLength, meshDecimationFraction);
+else
+    %If triangles are given, validate their format
+    if size(triangles, 2) ~= 3
+        warning('Triangles given in incorrect format');
+        return;
+    end
 end
 
+%Check there are now some triangles
 if size(triangles, 1) <= 0
     warning('No triangles found');
     return;

@@ -3,6 +3,16 @@ function [ intersects ] = CheckSphereTriangleCollision( trianglePoints, centre, 
 %triangle
 %   
 
+%Validate the inputs
+if size(centre, 2) ~= 3
+    warning('Centre given in incorrect format');
+    return;
+end
+if size(trianglePoints, 1) ~= 3 || size(trianglePoints, 2) ~= 3
+    warning('Triangle points given in incorrect format');
+    return;
+end
+
 intersects = false;
 
 cRel2 = trianglePoints(2,:) - trianglePoints(1,:);

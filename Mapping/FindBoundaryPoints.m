@@ -10,8 +10,16 @@ if size(points, 1) <= 0
     warning('No points given');
     return;
 end
+if size(points, 2) ~= 3
+    warning('Points given in incorrect format');
+    return;
+end
 if size(sharedSides, 1) <= 0
     warning('No shared sides given');
+    return;
+end
+if size(sharedSides, 2) ~= 4
+    warning('Shared sides given in incorrect format');
     return;
 end
 

@@ -3,9 +3,13 @@ function [] = PlotPath(pathWaypoints, colour)
 %   Plots the series of waypoints, given as rows containing triplets of
 %   coordinates, in the given colour
 
-
+%Validate the inputs
 if size(pathWaypoints, 1) <= 0
     warning('No path waypoints given');
+    return;
+end
+if size(pathWaypoints, 2) ~= 3
+    warning('Path waypoints given in incorrect format');
     return;
 end
 

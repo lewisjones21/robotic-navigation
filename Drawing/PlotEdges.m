@@ -2,12 +2,21 @@ function [] = PlotEdges( edges, waypoints, colour )
 %PLOTEDGES Draws lines between waypoints to represent their interconnecting
 %arcs
 
+%Validate the inputs
 if size(waypoints, 1) <= 0
     warning('No waypoints given');
     return;
 end
+if size(waypoints, 2) ~= 3
+    warning('Waypoints given in incorrect format');
+    return;
+end
 if size(edges, 1) <= 0
     warning('No edges given');
+    return;
+end
+if size(edges, 2) ~= 2
+    warning('Edges given in incorrect format');
     return;
 end
 
