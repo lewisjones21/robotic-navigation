@@ -1,6 +1,6 @@
 function [ triangles, points, traversableTriIndices, wallTriIndices, ...
         sharedSides, traversableSharedSides, boundaryPointIndices, ...
-        triangleSlopes ] ...
+        triangleInclines ] ...
     = CreateMap( points, maxSideLength, minObstacleHeight, maxIncline, ...
         triangles )
 %CREATEMAP Creates a map of the environment
@@ -14,11 +14,13 @@ end
 
 %Classify the triangles and find subsets of their indices representing
 %traversable areas and walls 
-[classifiedTriangles, triangleSlopes] ...
-    = ClassifyTriangles(triangles, points, maxIncline);
-indices = cumsum(ones(size(classifiedTriangles, 1), 1));
-traversableTriIndices = indices(classifiedTriangles(:,4) == 1);
-wallTriIndices = indices(classifiedTriangles(:,4) == 2);
+triangleInclines = FindTriangleInclines(triangles, points);
+% [classifiedTriangles, triangleSlopes] ...
+%     = ClassifyTriangles(triangles, points, maxIncline);
+indices = cumsum(ones(size(triangles, 1), 1));
+traversable = (triangleInclines <= maxIncline * pi / 180);
+traversableTriIndices = indices(traversable);
+wallTriIndices = indices(~traversable);
 
 %Remove walls that are too small (likely to be artefacts)
 wallTriIndices = wallTriIndices(max([ ...
