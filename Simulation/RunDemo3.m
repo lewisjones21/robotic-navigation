@@ -92,5 +92,8 @@ CoordErrors
         = AnalysePath(PathWaypointIndices, WaypointTriIndices, ...
             TriangleInclines, Waypoints, Triangles, Points, PathCoords)
 
+%Show the motion of the robot on the figure
+SimulateTraversal(Waypoints(PathWaypointIndices,:), 'white');
+
 end
 
