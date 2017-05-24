@@ -1,4 +1,5 @@
-function [] = PlotMesh(traversableTriIndices, wallTriIndices, triangles, points, triangleSlopes)
+function [] = PlotMesh(traversableTriIndices, wallTriIndices, ...
+    triangles, points, triangleSlopes)
 %PLOTMESH Plots the environment mesh
 %   Plots the map of the environment, with walls in red and traversable
 %   areas in green through yellow based on slope (if given)

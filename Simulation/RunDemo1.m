@@ -26,7 +26,8 @@ end
 
 %Create a map from the test data, passing in the generated mesh
 [Triangles, Points, TraversableTriIndices, WallTriIndices, ...
-    SharedSides, BoundaryPointIndices, TriangleSlopes] ...
+    SharedSides, TraversableSharedSides, BoundaryPointIndices, ...
+    TriangleSlopes] ...
         = CreateMap(Points, MaxSideLength, MinObstacleHeight, ...
             MaxIncline, Triangles);
 
@@ -44,7 +45,8 @@ hold on;
 
 %Place waypoints onto the mesh
 [AllWaypoints, AllEdges, AllWaypointTriIndices] ...
-    = GenerateNavigationGraph(TraversableTriIndices, Triangles, Points, SharedSides);
+    = GenerateNavigationGraph(TraversableTriIndices, Triangles, Points, ...
+        TraversableSharedSides, WheelSpan * 6);
 
 %Find the subset of waypoints and edges that are valid for the given robot
 %constraints, based on possible obstruction by walls; in other demos, this
@@ -66,18 +68,18 @@ PlotEdges(Edges, Waypoints, 'black');
 PlotWaypoints(Waypoints, 'white', false);
 
 %Find a path through the navigation graph
-[Path CoordErrors] = FindPath(Waypoints, Edges, PathCoords);
+[PathWaypointIndices CoordErrors] = FindPath(Waypoints, Edges, PathCoords);
 
 %Plot the path
 PlotNodes(PathCoords, 'blue')
-PlotPath(Waypoints(Path,:), 'magenta')
+PlotPath(Waypoints(PathWaypointIndices,:), 'magenta')
 
 CoordErrors
 
 %Analyse the path that was found
-[PathLength, PathHeightGain, MaxIncline, MaxInclineChange, ...
-    DirectDistance, FactorAboveDirect] ...
-        = AnalysePath(Path, Waypoints, WaypointTriIndices, ...
+[PathLength, DirectDistance, FactorAboveDirect, PathHeightGain, ...
+    MaxIncline, MaxFacedIncline, MaxTroughAngle, MaxRidgeAngle] ...
+        = AnalysePath(PathWaypointIndices, Waypoints, WaypointTriIndices, ...
             Triangles, Points, PathCoords)
 
 end

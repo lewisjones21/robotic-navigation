@@ -1,11 +1,11 @@
-function [ waypointPath, coordErrors ] = FindPath( waypoints, edges, coords )
+function [ pathWaypointIndices, coordErrors ] = FindPath( waypoints, edges, coords )
 %FINDPATH Generates a path from the specified waypoint to the target
 %coordinates
 %   Generates a path through the provided navigation network that passes
 %   through the closest waypoints to the given coordinates
 
 
-waypointPath = [];
+pathWaypointIndices = [];
 coordErrors = [];
 
 if size(waypoints, 1) <= 0 || size(edges, 1) <= 0 || size(coords, 1) <= 0
@@ -15,7 +15,8 @@ end
 %If more than 2 coordinates are given, the path must pass through
 %intermediate points; routes for these are calculated recursively
 if size(coords, 1) > 2
-    [ priorWaypointPath, coordErrors ] = FindPath(waypoints, edges, coords(1:size(coords,1)-1,:));
+    [ priorWaypointPath, coordErrors ] ...
+        = FindPath(waypoints, edges, coords(1:size(coords,1)-1,:));
     startCoords = coords(size(coords,1)-1,:);
     targetCoords = coords(size(coords,1),:);
 else
@@ -87,7 +88,7 @@ waypointDistances(startWaypointIndex) = 0;
 if waypointBacktrace(targetWaypointIndex) == 0
     %The target wasn't found in this navigation graph, so is unreachable
     %Return the start waypoint as the path
-    waypointPath = startWaypointIndex;
+    pathWaypointIndices = startWaypointIndex;
     warning('Target waypoint cannot be reached.')
 else
     %Find the shortest path to the target waypoints, given waypoint distances
@@ -96,7 +97,7 @@ else
     while iteration < maxIterations
 
         %Add the current waypoint to the path
-        waypointPath = [waypointPath, currentWaypoint];
+        pathWaypointIndices = [pathWaypointIndices, currentWaypoint];
 
         if currentWaypoint == startWaypointIndex
             break;
@@ -108,11 +109,17 @@ else
     end
 
     %Flip the path back to the correct direction
-    waypointPath = flip(waypointPath);
+    pathWaypointIndices = flip(pathWaypointIndices);
 end
 
 %Prepend the path calculated for previous intermediate coordinates
-waypointPath = [ priorWaypointPath, waypointPath ];
+pathWaypointIndices = [ priorWaypointPath, pathWaypointIndices ];
+
+%Remove the path waypoints that are repeated at the end of each segment
+repetitionIndices = [(pathWaypointIndices(1:size(pathWaypointIndices,2)-1) ...
+    - pathWaypointIndices(2:size(pathWaypointIndices,2)) == 0), 0];
+pathWaypointIndices = pathWaypointIndices(~repetitionIndices);
+
 
 
 end

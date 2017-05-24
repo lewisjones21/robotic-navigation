@@ -1,5 +1,6 @@
 function [ triangles, points, traversableTriIndices, wallTriIndices, ...
-        sharedSides, boundaryPointIndices, triangleSlopes ] ...
+        sharedSides, traversableSharedSides, boundaryPointIndices, ...
+        triangleSlopes ] ...
     = CreateMap( points, maxSideLength, minObstacleHeight, maxIncline, ...
         triangles )
 %CREATEMAP Creates a map of the environment
@@ -11,11 +12,8 @@ if nargin <= 4
     [triangles, points] = ConvertToMesh(points, maxSideLength);
 end
 
-%Classify the triangles and sub-group them
-% classifiedTriangles = ClassifyPolygons(triangles, points, 8, 30);
-% groundTriangles = classifiedTriangles(classifiedTriangles(:,4)==1,1:3);
-% traversableTriangles = [ groundTriangles; classifiedTriangles(classifiedTriangles(:,4)==2,1:3) ];
-% wallTriangles = classifiedTriangles(classifiedTriangles(:,4)==3,1:3);
+%Classify the triangles and find subsets of their indices representing
+%traversable areas and walls 
 [classifiedTriangles, triangleSlopes] ...
     = ClassifyTriangles(triangles, points, maxIncline);
 indices = cumsum(ones(size(classifiedTriangles, 1), 1));
@@ -39,7 +37,15 @@ wallTriIndices = wallTriIndices(max([ ...
 [boundaryPointIndices] = FindBoundaryPoints(points, sharedSides);
 
 %Find sides that are common to more than one traversable triangle
-[sharedSides] = FindSharedSides(triangles(traversableTriIndices,:), points);
+[traversableSharedSides] ...
+    = FindSharedSides(triangles(traversableTriIndices,:), points);
+%Remap the triangle indices of this subset of shared sides; currently they
+%index the array of traversable triangles - they should index the global
+%array of triangles
+traversableSharedSides(:,1) ...
+    = traversableTriIndices(traversableSharedSides(:,1));
+traversableSharedSides(:,2) ...
+    = traversableTriIndices(traversableSharedSides(:,2));
 
 end
 
