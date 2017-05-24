@@ -1,6 +1,6 @@
 function [ maxIncline, maxFacedIncline, maxTroughAngle, maxRidgeAngle ] ...
     = FindPathInclines( pathWaypointIndices, waypointTriIndices, ...
-        waypoints, triangles, points )
+        triangleInclines, waypoints, triangles, points )
 %FINDPATHMAXINCLINE Finds the maximum incline of the path
 %   Finds the steepest region of the path (maxIncline), which might pertain
 %   to no actual uphill travel if the path traverses horizontally across
@@ -22,9 +22,9 @@ function [ maxIncline, maxFacedIncline, maxTroughAngle, maxRidgeAngle ] ...
 %   change in path incline; this might be considered when determining the
 %   risk of the robot base catching on the ground on this ridge
 
-%Find the inclines of all primary triangles in the path
-pathTriangleInclines = FindTriangleInclines( ...
-    triangles(waypointTriIndices(pathWaypointIndices,1),:), points);
+%Find the inclines of all primary triangles in the 
+pathTriangleInclines ...
+    = triangleInclines(waypointTriIndices(pathWaypointIndices,1))
 
 %Find the maximum incline
 maxIncline = max(pathTriangleInclines);
