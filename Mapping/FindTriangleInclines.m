@@ -7,12 +7,12 @@ function [ inclines ] = FindTriangleInclines( triangles, points )
 
 inclines = [];
 
-if size(triangles, 1) <= 0
-    warning('No triangles given');
-    return;
-end
 if size(points, 1) <= 0
     warning('No points given');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
     return;
 end
 

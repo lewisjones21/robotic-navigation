@@ -14,6 +14,17 @@ function [ waypoints, edges, waypointTriIndices ] ...
 %	which the waypoints coincide with; for waypoints lying on just one
 %	triangle, T2 = -1
 
+
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+
+
 traversableTriangles = triangles(traversableTriIndices,:);
 
 %Place a waypoint at the centre of each traversable triangle
@@ -100,25 +111,24 @@ if nargin > 3
             edgeNumber = edgeNumber + 1;
 
         end 
-    end
-    
-end
+        
+        %Create edges between each side of each relevant triangle
+        for w1 = sideWaypointIndex:size(waypointTriIndices, 1)
+            for w2 = w1+1:size(waypointTriIndices, 1)
 
-%Create edges between each side of each relevant triangle
-for w1 = sideWaypointIndex:size(waypointTriIndices, 1)
-    for w2 = w1+1:size(waypointTriIndices, 1)
-        
-        %If these waypoints have a triangle in common
-        if waypointTriIndices(w1,1) == waypointTriIndices(w2,1) ...
-            || waypointTriIndices(w1,1) == waypointTriIndices(w2,2) ...
-            || waypointTriIndices(w1,2) == waypointTriIndices(w2,1) ...
-            || waypointTriIndices(w1,2) == waypointTriIndices(w2,2)
-            
-            %Link them
-            edges = [ edges; w1, w2 ];
-            
+                %If these waypoints have a triangle in common
+                if waypointTriIndices(w1,1) == waypointTriIndices(w2,1) ...
+                    || waypointTriIndices(w1,1) == waypointTriIndices(w2,2) ...
+                    || waypointTriIndices(w1,2) == waypointTriIndices(w2,1) ...
+                    || waypointTriIndices(w1,2) == waypointTriIndices(w2,2)
+
+                    %Link them
+                    edges = [ edges; w1, w2 ];
+
+                end
+
+            end
         end
-        
     end
 end
 

@@ -6,6 +6,15 @@ function [ sharedSides ] = FindSharedSides(triangles, points)
 
 sharedSides = [];
 
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+
 for t1 = 1:size(triangles, 1)
     for t2 = t1+1:size(triangles, 1)
         %Check each combination of sides

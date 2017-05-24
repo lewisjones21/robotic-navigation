@@ -22,6 +22,38 @@ function [ maxIncline, maxFacedIncline, maxTroughAngle, maxRidgeAngle ] ...
 %   change in path incline; this might be considered when determining the
 %   risk of the robot base catching on the ground on this ridge
 
+
+maxIncline = [];
+maxFacedIncline = [];
+maxTroughAngle = [];
+maxRidgeAngle = [];
+
+
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+if size(waypoints, 1) <= 0
+    warning('No waypoints given');
+    return;
+end
+if size(pathWaypointIndices, 1) <= 0
+    warning('No path waypoint indices given');
+    return;
+end
+if size(waypointTriIndices, 1) <= 0
+    warning('No waypoint triangle indices given');
+    return;
+end
+if size(triangleInclines, 1) <= 0
+    warning('No triangle inclines given');
+    return;
+end
+
 %Find the inclines of all primary triangles in the 
 pathTriangleInclines ...
     = triangleInclines(waypointTriIndices(pathWaypointIndices,1))
