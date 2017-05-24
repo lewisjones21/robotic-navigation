@@ -1,7 +1,10 @@
-function [] = PlotWaypoints(points, colour, drawIndices)
+function [] = PlotWaypoints(waypoints, colour, drawIndices)
+%PLOTWAYPOINTS Draws the given waypoints
+%   
 
-if size(points, 1) <= 0
-    warning('No points given');
+
+if size(waypoints, 1) <= 0
+    warning('No waypoints given');
     return;
 end
 if nargin < 2
@@ -16,11 +19,12 @@ figure(1);
 %        min([points(:,2); ylim(1)]) max([points(:,2); ylim(2)]) ...
 %        min([points(:,3); zlim(1)]) max([points(:,3); zlim(2)]) ];
 
-scatter3(points(:,1), points(:,2), points(:,3), 'o', 'MarkerFaceColor', colour)
+scatter3(waypoints(:,1), waypoints(:,2), waypoints(:,3), 'o', ...
+    'MarkerFaceColor', colour)
     
 if drawIndices
-    a = [1:size(points, 1)]'; b = num2str(a); c = cellstr(b);
-    text(points(:,1), points(:,2), points(:,3), c);
+    a = [1:size(waypoints, 1)]'; b = num2str(a); c = cellstr(b);
+    text(waypoints(:,1), waypoints(:,2), waypoints(:,3), c);
 end
 
 %axis(span);

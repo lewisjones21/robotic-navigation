@@ -1,17 +1,17 @@
-function [  ] = PlotSharedSides( sharedSides, triangles, points )
+function [] = PlotSharedSides( sharedSides, triangles, points )
 %PLOTSHAREDSIDES Draws lines between triangles with shared sides
 %   Draws a plot similar to the Voronoi tessellation
 
-if size(sharedSides, 1) <= 0
-    warning('No shared sides given');
+if size(points, 1) <= 0
+    warning('No points given');
     return;
 end
 if size(triangles, 1) <= 0
     warning('No triangles given');
     return;
 end
-if size(points, 1) <= 0
-    warning('No points given');
+if size(sharedSides, 1) <= 0
+    warning('No shared sides given');
     return;
 end
 

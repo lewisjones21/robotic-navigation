@@ -4,6 +4,17 @@ function [] = PlotMesh(traversableTriIndices, wallTriIndices, ...
 %   Plots the map of the environment, with walls in red and traversable
 %   areas in green through yellow based on slope (if given)
 
+
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+
+
 savedhold = ishold;
 
 span = [ min(points(:,1)) max(points(:,1)) ...

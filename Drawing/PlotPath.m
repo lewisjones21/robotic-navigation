@@ -1,4 +1,8 @@
 function [] = PlotPath(pathWaypoints, colour)
+%PLOTPATH Draws the given path
+%   Plots the series of waypoints, given as rows containing triplets of
+%   coordinates, in the given colour
+
 
 if size(pathWaypoints, 1) <= 0
     warning('No path waypoints given');

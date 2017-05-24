@@ -1,11 +1,13 @@
 function [] = PlotTriangles(triangles, points)
+%PLOTTRIANGLES Draws the given triangles
+%   
 
-if size(triangles, 1) <= 0
-    warning('No triangles given');
-    return;
-end
 if size(points, 1) <= 0
     warning('No points given');
+    return;
+end
+if size(triangles, 1) <= 0
+    warning('No triangles given');
     return;
 end
 

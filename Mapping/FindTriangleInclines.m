@@ -1,6 +1,20 @@
 function [ inclines ] = FindTriangleInclines( triangles, points )
 %FINDTRIANGLEINCLINES Returns the slopes of the triangles in radians
-%   
+%   Triangles should be presented as rows containing triplets of indices
+%   into the points matrix
+%   Points should be presented of rows containing triplets of spatial
+%   coordinates
+
+inclines = [];
+
+if size(triangles, 1) <= 0
+    warning('No triangles given');
+    return;
+end
+if size(points, 1) <= 0
+    warning('No points given');
+    return;
+end
 
 %Determine the normals
 a = points(triangles(:,2),:) - points(triangles(:,1),:);

@@ -1,4 +1,6 @@
 function [] = PlotPoints(points, drawIndices)
+%PLOTPOINTS Draws the given points
+%   Plots the given point cloud, colour-coded by depth
 
 if size(points, 1) <= 0
     warning('No points given');
