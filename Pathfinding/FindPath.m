@@ -60,7 +60,7 @@ startWaypointIndex = 1;
 %Set an arbitrary large value for waypoints to be closer than
 bestDist2 = arbitraryLargeValue;
 for i = 1:size(waypoints, 1)
-    diff = waypoints(i,:) - startCoords;
+    diff = waypoints(i,1:2) - startCoords(1:2);
     dist2 = dot(diff, diff);
     if dist2 < bestDist2
         bestDist2 = dist2;
@@ -81,7 +81,7 @@ targetWaypointIndex = 1;
 %Set an arbitrary large value for waypoints to be closer than
 bestDist2 = arbitraryLargeValue;
 for i = 1:size(waypoints, 1)
-    diff = waypoints(i,:) - targetCoords;
+    diff = waypoints(i,1:2) - targetCoords(1:2);
     dist2 = dot(diff, diff);
     if dist2 < bestDist2
         bestDist2 = dist2;
