@@ -4,6 +4,7 @@ function [] = Initialise()
 
 
 addpath('Analysis');
+addpath('Analysis/Testing');
 addpath('Drawing');
 addpath('Mapping');
 addpath('Mapping/Kinect 2 Interface/jrterven-Kin2-ff46b0c');
