@@ -1,6 +1,6 @@
 function [ pathLength, directDistance, factorAboveDirect ] ...
         = AnalysePathMinimal( pathWaypointIndices, ...
-            waypoints, triangles, points, pathCoords )
+            waypoints, triangles, points, pathCoords, coordErrors )
 %ANALYSEPATHMINIMAL Returns length data about the path
 %   
 
@@ -59,6 +59,14 @@ pathWaypoints = waypoints(pathWaypointIndices,:);
 %(length of the path through all path waypoints); the length of the path
 %that was found
 pathLength = FindPathLength(pathWaypoints);
+
+%Correct the path length to make it more representative
+%   + the distance required at either end to reach the target coords
+%	+ the distance required to reach the intermediate target coords and
+%       then get back to the path to continue traversing it
+pathLength = pathLength ...
+    + sum(coordErrors([1, size(coordErrors, 1)])) ...
+    + 2 * sum(coordErrors(2:size(coordErrors,1)-1));
 
 %The percentage by which the calculated path's length overshoots the
 %minimum possible path length

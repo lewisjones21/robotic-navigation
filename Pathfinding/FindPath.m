@@ -68,9 +68,12 @@ for i = 1:size(waypoints, 1)
     end
 end
 %If this is the smallest sub-path in the coordinate chain, note the
-%distance of the start waypoint from the specified start position
+%distance of the start waypoint from the specified start position in the
+%horizontal plane
 if size(priorWaypointPath, 1) == 0
-    coordErrors = [ coordErrors; sqrt(bestDist2) ];
+    coordErrors = [ coordErrors; ...
+        sqrt(sum((waypoints(startWaypointIndex,1:2) ...
+            - startCoords(1:2)).^2)) ];
 end
 
 %Find the target waypoint (the one closest to the target coordinates)
@@ -85,8 +88,11 @@ for i = 1:size(waypoints, 1)
         targetWaypointIndex = i;
     end
 end
-%Tally how far the target waypoint is from the specified target position
-coordErrors = [ coordErrors; sqrt(bestDist2) ];
+%Tally how far the target waypoint is from the specified target position in
+%the horizontal plane
+coordErrors = [ coordErrors; ...
+        sqrt(sum((waypoints(targetWaypointIndex,1:2) ...
+            - startCoords(1:2)).^2)) ];
 
 %Precalculate the lengths of all edges
 edgeLengths = zeros(size(edges, 1), 1);
