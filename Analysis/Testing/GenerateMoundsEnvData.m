@@ -56,8 +56,7 @@ points = uniquetol(points, proximityTolerance, 'ByRows', true);
 %Alter the z coordinates to make the mounds
 points(:,3) = points(:,3) ...
                 + 0.5 * sin(1.6 * points(:,1)) ...
-                + 0.3 * sin(2 * points(:,2));
-
+                + 0.3 * cos(points(index, 1) + 2.2 * points(index, 2));
 
 %Define triangles that a valid path may not intersect
 %In this case, no specific obstructions are present, so leave the set empty
