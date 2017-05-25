@@ -109,7 +109,43 @@ points = uniquetol(points, proximityTolerance, 'ByRows', true);
 
 
 %Define triangles that a valid path may not intersect
-%In this case, no major obstructions are present, so leave the set empty
-restrictionTriangles = [];
+%In this case, the major obstructions are the walls of the corridor;
+%form triangles coincident with the inner walls
+%            _______________________
+%           |      C|               |
+%           |      B|......         |
+%           |       |      |D       |
+% Y         |      A|      |        |
+% ^         |        ``````|E       |
+% |         |______________|F_______|
+% '-->X
+%
+restrictionTriangles = [ ...
+    %A
+    left + widthBy3,            back - 2 * depthBy3,    bottom;
+    left + widthBy3,            back - depthBy3,        bottom;
+    left + widthBy3,            back - depthBy3,        top;
+    %B
+    left + widthBy3,            back - depthBy3,        bottom;
+    left + widthBy3,            back - depthBy3,        top;
+    left + widthBy3,            back,                   bottom;
+    %C
+    left + widthBy3,            back,                   bottom;
+    left + widthBy3,            back - depthBy3,        top;
+    left + widthBy3,            back,                   top;
+    
+    %D
+    right - widthBy3,           front + 2 * depthBy3,   heightBy3;
+    right - widthBy3,           front + depthBy3,       bottom;
+    right - widthBy3,           front + depthBy3,       top;
+    %E
+    right - widthBy3,           front + depthBy3,       bottom;
+    right - widthBy3,           front + depthBy3,       top;
+    right - widthBy3,           front,               	bottom;
+    %F
+    right - widthBy3,           front,                  bottom;
+    right - widthBy3,           front + depthBy3,       top;
+    right - widthBy3,           front,                  top;
+    ];
 
 end

@@ -114,7 +114,53 @@ points = uniquetol(points, proximityTolerance, 'ByRows', true);
 
 
 %Define triangles that a valid path may not intersect
-%In this case, no major obstructions are present, so leave the set empty
-restrictionTriangles = [];
+%In this case, the major obstructions are the walls of the corridor;
+%form triangles coincident with the inner walls
+%           |     |
+%          B|_____|D
+%              F
+% Y          _____
+% ^        A|  E  |C
+% |         |     |
+% '-->X
+%
+restrictionTriangles = [ ...
+    %A
+    left + widthBy3,            front,                  bottom;
+    left + widthBy3,            front + depthBy3,       bottom;
+    left + widthBy3,            front + depthBy3,       top;
+    %B
+    left + widthBy3,            back,                   bottom;
+    left + widthBy3,            back - depthBy3,        bottom;
+    left + widthBy3,            back - depthBy3,        top;
+    
+    %C
+    left +  2 * widthBy3,       front,                  bottom;
+    left +  2 * widthBy3,       front + depthBy3,       bottom;
+    left +  2 * widthBy3,       front + depthBy3,       top;
+    %D
+    left +  2 * widthBy3,       back,                   bottom;
+    left +  2 * widthBy3,       back - depthBy3,        bottom;
+    left +  2 * widthBy3,       back - depthBy3,        top;
+    
+    %E1
+    left +      widthBy3,       front +     depthBy3,   bottom;
+    left +  2 * widthBy3,       front + 	depthBy3,   bottom;
+    left +      widthBy3,       front + 	depthBy3,   top;
+    %E2
+    left +      widthBy3,       front +     depthBy3,   top;
+    left +  2 * widthBy3,       front +     depthBy3,   bottom;
+    left +  2 *	widthBy3,       front + 	depthBy3,   top
+    
+    %F1
+    left +      widthBy3,       front + 2 * depthBy3,   bottom;
+    left +  2 * widthBy3,       front + 2 * depthBy3,   bottom;
+    left +      widthBy3,       front + 2 * depthBy3,   top;
+    %F2
+    left +      widthBy3,       front + 2 * depthBy3,   top;
+    left +  2 * widthBy3,       front + 2 * depthBy3,   bottom;
+    left +  2 *	widthBy3,       front + 2 * depthBy3,   top
+    ];
+
 
 end
