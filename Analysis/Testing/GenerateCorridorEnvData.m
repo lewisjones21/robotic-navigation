@@ -16,7 +16,7 @@ right = width / 2;
 back = depth / 2;
 front = -depth / 2;
 bottom = 0;
-top = 2;
+top = 3;
 
 height = top - bottom;
 
@@ -25,7 +25,7 @@ depthBy3 = depth / 3;
 
 xDensity = 18;
 yDensity = 18;
-zDensity = 6;
+zDensity = 9;
 
 xDensityBy3 = xDensity / 3;
 yDensityBy3 = yDensity / 3;

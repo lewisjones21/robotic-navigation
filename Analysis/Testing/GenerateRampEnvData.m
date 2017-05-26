@@ -16,7 +16,7 @@ right = width / 2;
 back = depth / 2;
 front = -depth / 2;
 bottom = 0;
-top = 2;
+top = 3;
 
 height = top - bottom;
 

@@ -21,8 +21,8 @@ for x = 1:n
         points(index, 1) = xValues(x);
         points(index, 2) = yValues(y);
         points(index, 3) ...
-            = 0.5 * sin(1.6 * points(index, 1)) ...
-            + 0.3 * cos(points(index, 1) + 2.2 * points(index, 2));
+            = 0.2 * sin(1.6 * points(index, 1)) ...
+            + 0.1 * cos(points(index, 1) + 2.2 * points(index, 2));
     end
 end
 

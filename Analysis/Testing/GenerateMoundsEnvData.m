@@ -16,38 +16,38 @@ right = width / 2;
 back = depth / 2;
 front = -depth / 2;
 bottom = 0;
-top = 2;
+top = 3;
 
 height = top - bottom;
 
-xDensity = 32;
-yDensity = 32;
-zDensity = 4;
+xDensity = 16;
+yDensity = 16;
+zDensity = 6;
 
 points = [];
 
 %Back Wall
 points = [points; GenerateQuadrilateralPoints([left, back, bottom], ...
-    [width, 0, 0], [0, 0, height], xDensity * 0.5, zDensity * 0.5)];
+    [width, 0, 0], [0, 0, height], xDensity * 0.5, zDensity)];
 
 %Front Wall
 points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
-    [width, 0, 0], [0, 0, height], xDensity * 0.5, zDensity * 0.5)];
+    [width, 0, 0], [0, 0, height], xDensity * 0.5, zDensity)];
 
 %Left Wall
-points = [points; GenerateQuadrilateralPoints([left, back, bottom], ...
-    [0, depth, 0], [0, 0, height], xDensity * 0.5, zDensity * 0.5)];
+points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
+    [0, depth, 0], [0, 0, height], xDensity * 0.5, zDensity)];
 
 %Right Wall
-points = [points; GenerateQuadrilateralPoints([right, back, bottom], ...
-    [0, depth, 0], [0, 0, height], xDensity * 0.5, zDensity * 0.5)];
+points = [points; GenerateQuadrilateralPoints([right, front, bottom], ...
+    [0, depth, 0], [0, 0, height], xDensity * 0.5, zDensity)];
 
 %Floor
-points = [points; GenerateQuadrilateralPoints([left, back, bottom], ...
+points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
     [width, 0, 0], [0, depth, 0], xDensity, yDensity)];
 
 %Ceiling
-points = [points; GenerateQuadrilateralPoints([left, back, top], ...
+points = [points; GenerateQuadrilateralPoints([left, front, top], ...
     [width, 0, 0], [0, depth, 0], xDensity * 0.25, yDensity * 0.25)];
 
 points = uniquetol(points, proximityTolerance, 'ByRows', true);
@@ -55,8 +55,8 @@ points = uniquetol(points, proximityTolerance, 'ByRows', true);
 
 %Alter the z coordinates to make the mounds
 points(:,3) = points(:,3) ...
-                + 0.5 * sin(1.6 * points(:,1)) ...
-                + 0.3 * cos(points(index, 1) + 2.2 * points(index, 2));
+                + 0.2 * sin(1.6 * points(:,1)) ...
+                + 0.1 * cos(points(:, 1) + 2.2 * points(:, 2));
 
 %Define triangles that a valid path may not intersect
 %In this case, no specific obstructions are present, so leave the set empty
