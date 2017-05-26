@@ -1,5 +1,5 @@
 function [ pathCoordRows ] ...
-    = GenerateTestPathCoords( N, width, height, collisionRadius )
+    = GenerateTestPathCoords( N, width, depth, collisionRadius )
 %GENERATETESTPATHCOORDS Generate pairs of start and end points
 %   Generates N pairs of coordinates to be used as target start and end
 %   positions in the testing environments; these follow the pattern that A
@@ -12,7 +12,7 @@ function [ pathCoordRows ] ...
 %   will be above the environment when drawn for debugging
 
 
-pathCoords = [];
+pathCoordRows = [];
 
 if N < 1
     warn('No coords requested');
@@ -22,8 +22,8 @@ if width <= 0
     warn('Width is non-positive');
     return;
 end
-if height <= 0
-    warn('Height is non-positive');
+if depth <= 0
+    warn('Depth is non-positive');
     return;
 end
 
@@ -35,21 +35,21 @@ if collisionRadius > widthBy3 / 2
 end
 
 widthBy3MinusBorder = widthBy3 - 2 * collisionRadius;
-heightMinusBorder = height - 2 * collisionRadius;
+depthMinusBorder = depth - 2 * collisionRadius;
 
 %Generate start x in left 3rd, avoiding border area
-Ax = ((rand(N, 1) - 0.5) * widthBy3MinusBorder) + (widthBy3 * 0.5);
+Ax = ((rand(N, 1) - 0.5) * widthBy3MinusBorder) - widthBy3;
 %Generate end x in right 3rd, avoiding border area
-Bx = ((rand(N, 1) - 0.5) * widthBy3MinusBorder) + (widthBy3 * 2.5);
+Bx = ((rand(N, 1) - 0.5) * widthBy3MinusBorder) + widthBy3;
 
 %Generate start and end y within height range, avoiding border area
-Ay = ((rand(N, 1) - 0.5) * heightMinusBorder) + (height * 0.5);
-By = ((rand(N, 1) - 0.5) * heightMinusBorder) + (height * 0.5);
+Ay = ((rand(N, 1) - 0.5) * depthMinusBorder);% + (depth * 0.5);
+By = ((rand(N, 1) - 0.5) * depthMinusBorder);% + (depth * 0.5);
 
 z = ones(N, 1);
 
 
-pathCoords = [ Ax, Ay, z, Bx, By, z ];
+pathCoordRows = [ Ax, Ay, z, Bx, By, z ];
 
 
 end
