@@ -27,7 +27,7 @@ end
 
 %Create a triangle mesh from the point cloud, unless triangles are already
 %given
-if nargin <= 5 || size(triangles, 1) <= 0
+if nargin <= 5 || size(triangles, 1) < 1
     [triangles, points] = ConvertToMesh(points, ...
         maxSideLength, meshDecimationFraction);
 else
@@ -39,7 +39,7 @@ else
 end
 
 %Check there are now some triangles
-if size(triangles, 1) <= 0
+if size(triangles, 1) < 1
     warning('No triangles found');
     return;
 end

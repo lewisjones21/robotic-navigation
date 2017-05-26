@@ -24,10 +24,10 @@ figure(1);
 %Draw the path coords (highlighted)
 scatter3(nodes(:,1), nodes(:,2), nodes(:,3), 400, 'MarkerFaceColor', colour)
 
-if nargin < 3
+if nargin < 3 || ~noIndices
     %Draw indices showing the order of the path coords
     a = [1:size(nodes, 1)]'; b = num2str(a); c = cellstr(b);
-    offset = ones(size(nodes, 1), 1) * 0.02;
+    offset = ones(size(nodes, 1), 1) * 0.05;
     text(nodes(:,1) - offset, nodes(:,2), nodes(:,3) + offset, c, ...
         'Color', 'white');
 end

@@ -1,5 +1,5 @@
 function [ triangles, points ] = ConvertToMesh( points, ...
-    maxsidelength, meshDecimationFraction )
+    maxsidelength, meshDecimationFraction, maxHeight )
 %CONVERTTOMESH Converts point cloud into triangle mesh
 %   Converts the given point cloud (rows of tuples [X, Y, Z]) into a mesh
 %   of triangles defined by indices referencing the given points ([p1, p2,

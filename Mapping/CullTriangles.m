@@ -1,7 +1,8 @@
-function [ triangles ] = CullTriangles( triangles, points, maxsidelength, minsidelength )
+function [ triangles ] = CullTriangles( triangles, points, ...
+    maxSideLength, minSideLength, maxHeight )
 %CULLTRIANGLES Removes invalid triangles
-%   Removes triangles from the input list that are too large to be valid
-%   parts of the tessellation
+%   Removes triangles from the input list that are too large/ small/ high
+%   to be valid parts of the tessellation
 
 %Validate the inputs
 if size(points, 1) <= 0
@@ -22,11 +23,11 @@ if size(triangles, 2) ~= 3
 end
 
 if nargin < 4
-    minsidelength = 0;
+    minSideLength = 0;
 end
 
-maxdist2 = maxsidelength^2;
-mindist2 = minsidelength^2;
+maxdist2 = maxSideLength^2;
+mindist2 = minSideLength^2;
 keeplist = ones(size(triangles,1),1);
 
 for t = 1:size(triangles,1)

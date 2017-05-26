@@ -1,4 +1,4 @@
-function [] = PlotPath(pathWaypoints, colour)
+function [] = PlotPath(pathWaypoints, colour, noIndices, linesOnly)
 %PLOTPATH Draws the given path
 %   Plots the series of waypoints, given as rows containing triplets of
 %   coordinates, in the given colour
@@ -26,16 +26,26 @@ for l = 2:lastIndex
     line(pathWaypoints(:,1), pathWaypoints(:,2), pathWaypoints(:,3), 'Color', colour,'LineWidth',3);
 end
 
-%Draw the path waypoints (highlighted)
-scatter3(pathWaypoints(:,1), pathWaypoints(:,2), pathWaypoints(:,3), 144, 'MarkerFaceColor', colour)
-%Draw the path waypoints (highlighted)
-scatter3(pathWaypoints([1, lastIndex],1), pathWaypoints([1, lastIndex],2), pathWaypoints([1, lastIndex],3), ...
-    400, 'MarkerFaceColor', colour)
+if nargin < 4 || ~linesOnly
+    %Draw the path waypoints (highlighted)
+    scatter3(pathWaypoints(:,1), ...
+            pathWaypoints(:,2), ...
+            pathWaypoints(:,3), ...
+                144, 'MarkerFaceColor', colour)
+    scatter3(pathWaypoints([1, lastIndex],1), ...
+            pathWaypoints([1, lastIndex],2), ...
+            pathWaypoints([1, lastIndex],3), ...
+                400, 'MarkerFaceColor', colour)
+end
 
-%Draw indices showing the order of the path points
-a = [1:size(pathWaypoints, 1)]'; b = num2str(a); c = cellstr(b);
-offset = ones(size(pathWaypoints, 1), 1) * 0.05;
-text(pathWaypoints(:,1) - offset, pathWaypoints(:,2), pathWaypoints(:,3) + offset, c);
+if nargin < 3 || ~noIndices
+    %Draw indices showing the order of the path points
+    a = [1:size(pathWaypoints, 1)]'; b = num2str(a); c = cellstr(b);
+    offset = ones(size(pathWaypoints, 1), 1) * 0.05;
+    text(pathWaypoints(:,1) - offset, ...
+        pathWaypoints(:,2), ...
+        pathWaypoints(:,3) + offset, c);
+end
 
 %axis(span);
 grid on;
