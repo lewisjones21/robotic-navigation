@@ -2,7 +2,7 @@ function [ intersects ] ...
     = CheckSphereTriangleCollision( trianglePoints, centre, radius )
 %CHECKSPHERETRIANGLECOLLISION Determines whether the sphere intersects the
 %triangle
-%   trianglePoints is given as 3 rows of 3 vertex coordinates
+%   trianglePoints is given as 3 rows of (x, y, z) vertex coordinates
 %   centre notes the centre of the sphere
 %   radius is the radius of the sphere
 
@@ -18,9 +18,9 @@ end
 
 intersects = false;
 
-cRel2 = trianglePoints(2,:) - trianglePoints(1,:);
-cRel3 = trianglePoints(3,:) - trianglePoints(1,:);
-n = cross(cRel2, cRel3);
+v1tov2 = trianglePoints(2,:) - trianglePoints(1,:);
+v1tov3 = trianglePoints(3,:) - trianglePoints(1,:);
+n = cross(v1tov2, v1tov3);
 if (norm(n) > 0)
     n = n / norm(n);
 else
@@ -37,29 +37,29 @@ end
 
 r2 = radius * radius;
 
-%Quick check: see if the centre is close enough to the triangle
-maxDist = sqrt(max(dot(cRel2, cRel2), dot(cRel3, cRel3))) - radius;
-cRel = centre - trianglePoints(1,:);
-if maxDist * maxDist > dot(cRel, cRel)
-    return;
-end
+% %Quick check: see if the centre is close enough to the triangle
+% maxDist = sqrt(max(dot(v1tov2, v1tov2), dot(v1tov3, v1tov3))) - radius;
+v1toC = centre - trianglePoints(1,:);
+% if maxDist * maxDist > dot(v1toC, v1toC)
+%     return;
+% end
 
 %Quick check: see if the centre is close enough to any vertex
 %Check if centre is within range of v1
-%cRel = centre - trianglePoints(1,:);
-if dot(cRel, cRel) <= r2
+%v1toC = centre - trianglePoints(1,:);
+if dot(v1toC, v1toC) <= r2
     intersects = true;
     return;
 end
 %Check if centre is within range of v2
-cRel = centre - trianglePoints(2,:);
-if dot(cRel, cRel) <= r2
+v1toC = centre - trianglePoints(2,:);
+if dot(v1toC, v1toC) <= r2
     intersects = true;
     return;
 end
 %Check if centre is within range of v3
-cRel = centre - trianglePoints(3,:);
-if dot(cRel, cRel) <= r2
+v1toC = centre - trianglePoints(3,:);
+if dot(v1toC, v1toC) <= r2
     intersects = true;
     return;
 end
@@ -90,7 +90,7 @@ if d12 >= 0
             %Projection of centre is in front of edge v2->v3
             %Projection of centre is behind edge v3->v1:
             %Projection is inside the 'V' defined by edges v1->v2, v2->v3
-            edge = trianglePoints(1,:) - trianglePoints(3,:);
+            edge = -v1tov3;
             edgeLength2 = dot(edge, edge);
             centreEdgeDist2 = dot(centre - trianglePoints(3,:), edge);
             if centreEdgeDist2 <= 0 || centreEdgeDist2 >= edgeLength2
@@ -135,8 +135,8 @@ if d12 >= 0
             %Projection of centre is behind edge v2->v3
             %Projection of centre is behind edge v3->v1
             %Check if centre is within range of v3
-            cRel = centre - trianglePoints(3,:);
-            if dot(cRel, cRel) <= r2
+            v1toC = centre - trianglePoints(3,:);
+            if dot(v1toC, v1toC) <= r2
                 intersects = true;
                 return;
             else
@@ -153,7 +153,7 @@ else
             %Projection of centre is in front of edge v2->v3
             %Projection of centre is in front of edge v3->v1:
             %Projection is inside the 'V' defined by edges v2->v3, v3->v1
-            edge = trianglePoints(2,:) - trianglePoints(1,:);
+            edge = v1tov2;
             edgeLength2 = dot(edge, edge);
             centreEdgeDist2 = dot(centre - trianglePoints(1,:), edge);
             if centreEdgeDist2 <= 0 || centreEdgeDist2 >= edgeLength2
@@ -174,8 +174,8 @@ else
             %Projection of centre is in front of edge v2->v3
             %Projection of centre is behind edge v3->v1:
             %Check if centre is within range of v1
-            cRel = centre - trianglePoints(1,:);
-            if dot(cRel, cRel) <= r2
+            v1toC = centre - trianglePoints(1,:);
+            if dot(v1toC, v1toC) <= r2
                 intersects = true;
                 return;
             else
@@ -190,8 +190,8 @@ else
             %Projection of centre is in front of edge v3->v1
             %Projection is inside the 'V' defined by edges v1->v2, v3->v1
             %Check if centre is within range of v2
-            cRel = centre - trianglePoints(1,:);
-            if dot(cRel, cRel) <= r2
+            v1toC = centre - trianglePoints(1,:);
+            if dot(v1toC, v1toC) <= r2
                 intersects = true;
                 return;
             else

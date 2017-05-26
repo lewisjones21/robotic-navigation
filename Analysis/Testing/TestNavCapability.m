@@ -1,6 +1,6 @@
 function [ SuccessRates, AvgTimesTaken, ...
     Noise, PointDecimationFraction, MeshDecimationFraction ] ...
-    = ValidatePath( TestType, TestEnv, NumIterations )
+    = TestNavCapability( TestType, TestEnv, NumIterations )
 %TESTNAVCAPABILITY Test system navigation capability
 %   Runs a series of tests with varying noise or varying point or mesh
 %   decimation and returns the success rate with which a path is found, and
