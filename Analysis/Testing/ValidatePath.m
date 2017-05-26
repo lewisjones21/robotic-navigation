@@ -37,15 +37,15 @@ for w = 1:size(waypoints,1)-1
                 restrictionTriangles((t-1)*3+(1:3),:), ...
                 centre, collisionRadius);
             
-            %Debug
-            hold on;
-            if valid
-                %scatter3(centre(1), centre(2), centre(3), ...
-                %    1200 * collisionRadius, 'MarkerFaceColor', 'green');
-            else
-                scatter3(centre(1), centre(2), centre(3), ...
-                    1200 * collisionRadius, 'MarkerFaceColor', 'red');
-            end
+%             %Debug
+%             hold on;
+%             if valid
+%                 %scatter3(centre(1), centre(2), centre(3), ...
+%                 %    1200 * collisionRadius, 'MarkerFaceColor', 'green');
+%             else
+%                 scatter3(centre(1), centre(2), centre(3), ...
+%                     1200 * collisionRadius, 'MarkerFaceColor', 'red');
+%             end
             
             %If any check shows an intersection, the path is not valid
             if ~valid

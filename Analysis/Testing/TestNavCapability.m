@@ -22,16 +22,16 @@ EnvSize = [6, 6];
 MaxSideLength = 2;
 MinObstacleHeight = 0.03;
 MaxHeight = 2;
-MaxIncline = 30;
-CollisionRadius = 0.2; CollisionSafetyFactor = 1.4;
+MaxIncline = 40;
+CollisionRadius = 0.2; CollisionSafetyFactor = 1.8;
 WheelSpan = 0.2;
 SpacingFactor = 0.6;
 
 NumPointPairs = 5;
 
-Noise = 0.03;
+Noise = 0.01;
 PointDecimationFraction = 1;
-MeshDecimationFraction = 0.2;
+MeshDecimationFraction = 0.15;
 
 switch TestType
     %Test against varying noise

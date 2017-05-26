@@ -1,5 +1,5 @@
 function [ Results, TimeResults, FileName ] ...
-    = TestNavCapabilityAll( TestType )
+    = TestNavCapabilityAll( TestType, NumIterations )
 %TESTNAVCAPABILITYALL Tests the navigation capability of the system
 %   Tests how successful the system is at navigating under a range of
 %   different parameter settings on all test environments
@@ -15,6 +15,10 @@ function [ Results, TimeResults, FileName ] ...
 
 FileName = tempname;
 
+if nargin < 2
+    NumIterations = 10;
+end
+
 switch TestType
     case 1
         %Test each environment against a range of noise values
@@ -24,7 +28,7 @@ switch TestType
         TimeResults = [ NoiseValues', zeros(NumNoiseValues, 4) ];
         for environment = 1:4
             [SuccessRates, AvgTimesTaken, ~, ~, ~] ...
-                = TestNavCapability(1, environment, 10, NoiseValues);
+                = TestNavCapability(1, environment, NumIterations, NoiseValues);
             Results(:,environment+1) = SuccessRates';
             TimeResults(:,environment+1) = AvgTimesTaken';
         end
@@ -41,7 +45,7 @@ switch TestType
         TimeResults = [ PointDecValues', zeros(NumPointDecValues, 4) ];
         for environment = 1:4
             [SuccessRates, AvgTimesTaken, ~, ~, ~] ...
-                = TestNavCapability(2, environment, 10, PointDecValues);
+                = TestNavCapability(2, environment, NumIterations, PointDecValues);
             Results(:,environment+1) = SuccessRates';
             TimeResults(:,environment+1) = AvgTimesTaken';
         end
@@ -52,13 +56,13 @@ switch TestType
         
     case 3
         %Test each environment against a range of noise values
-        MeshDecValues = [1:-0.1:0.1];
+        MeshDecValues = [1 0.3 0.2 0.15 0.1 0.05];
         NumMeshDecValues = length(MeshDecValues);
         Results = [ MeshDecValues', zeros(NumMeshDecValues, 4) ];
         TimeResults = [ MeshDecValues', zeros(NumMeshDecValues, 4) ];
         for environment = 1:4
             [SuccessRates, AvgTimesTaken, ~, ~, ~] ...
-                = TestNavCapability(3, environment, 10, MeshDecValues);
+                = TestNavCapability(3, environment, NumIterations, MeshDecValues);
             Results(:,environment+1) = SuccessRates';
             TimeResults(:,environment+1) = AvgTimesTaken';
         end
