@@ -1,6 +1,6 @@
 function [ SuccessRates, AvgTimesTaken, ...
     Noise, PointDecimationFraction, MeshDecimationFraction ] ...
-    = TestNavCapability( TestType, TestEnv, NumIterations )
+    = TestNavCapability( TestType, TestEnv, NumIterations, ValueSet )
 %TESTNAVCAPABILITY Test system navigation capability
 %   Runs a series of tests with varying noise or varying point or mesh
 %   decimation and returns the success rate with which a path is found, and
@@ -10,6 +10,11 @@ function [ SuccessRates, AvgTimesTaken, ...
 %   TestType - 1: Noise, 2: Point Decimation, 3: Mesh Decimation
 %   
 %   TestEnv - 1: Plane, 2: Mounds, 3: Corridor, 4: Ramp
+%   
+%   NumIterations - How many times to test each parameter setting against a
+%       random set of points
+%   
+%   ValueSet - The array of values to test the chosen parameter against
 
 
 EnvSize = [6, 6];
@@ -31,21 +36,19 @@ MeshDecimationFraction = 0.2;
 switch TestType
     %Test against varying noise
     case 1
-        Noise = 0:0.02:0.2;
+        Noise = ValueSet;%0:0.02:0.2;
         
     %Test against varying point decimation fraction
     case 2
-        PointDecimationFraction = 1:-0.1:0.1;
+        PointDecimationFraction = ValueSet;%1:-0.1:0.1;
         
     %Test against varying mesh decimation fraction
     case 3
-        MeshDecimationFraction = 1:-0.1:0.1;
+        MeshDecimationFraction = ValueSet;%1:-0.1:0.1;
 end
 
 %Determine how many iterations to expect
-NumValues = max([length(Noise), ...
-                length(PointDecimationFraction), ...
-                length(MeshDecimationFraction)]);
+NumValues = length(ValueSet);
 
 %Prepare the data output matrices
 SuccessRates = zeros(1, NumValues);
@@ -143,19 +146,19 @@ for iteration = 1:NumIterations
     %graph for it
     ThisGenTimeTaken = cputime - startTime;
     
-    %Debug
-    if iteration == 1
-        %Plot the mesh
-        hold off;
-        PlotMesh(TraversableTriIndices, WallTriIndices, ...
-            Triangles, Points, [], MaxHeight);
-        hold on;
-        PlotEdges(Edges, Waypoints, 'black');
-        PlotWaypoints(Waypoints, 'white', false);
-        PlotNodes(ABCoords(:,1:3), 'blue');
-        PlotNodes(ABCoords(:,4:6), 'magenta');
-        view([-0,90])
-    end
+%     %Debug
+%     if iteration == 1
+%         %Plot the mesh
+%         hold off;
+%         PlotMesh(TraversableTriIndices, WallTriIndices, ...
+%             Triangles, Points, [], MaxHeight);
+%         hold on;
+%         PlotEdges(Edges, Waypoints, 'black');
+%         PlotWaypoints(Waypoints, 'white', false);
+%         PlotNodes(ABCoords(:,1:3), 'blue');
+%         PlotNodes(ABCoords(:,4:6), 'magenta');
+%         view([-0,90])
+%     end
     
     for pointPair = 1:size(ABCoords,1)
 
