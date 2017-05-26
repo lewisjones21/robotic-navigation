@@ -16,6 +16,7 @@ EnvSize = [6, 6];
 
 MaxSideLength = 2;
 MinObstacleHeight = 0.03;
+MaxHeight = 2;
 MaxIncline = 30;
 CollisionRadius = 0.2; CollisionSafetyFactor = 1.4;
 WheelSpan = 0.2;
@@ -129,7 +130,7 @@ for iteration = 1:NumIterations
     %Place waypoints onto the mesh
     [Waypoints, Edges, WaypointTriIndices] ...
         = GenerateNavigationGraph(TraversableTriIndices, Triangles, ...
-            Points,  TraversableSharedSides, SpacingFactor);
+            Points,  TraversableSharedSides, SpacingFactor, MaxHeight);
 
     %Validate the waypoints for the given collision radius
     [Waypoints, Edges, ~] ...
@@ -146,7 +147,8 @@ for iteration = 1:NumIterations
     if iteration == 1
         %Plot the mesh
         hold off;
-        PlotMesh(TraversableTriIndices, WallTriIndices, Triangles, Points);
+        PlotMesh(TraversableTriIndices, WallTriIndices, ...
+            Triangles, Points, [], MaxHeight);
         hold on;
         PlotEdges(Edges, Waypoints, 'black');
         PlotWaypoints(Waypoints, 'white', false);

@@ -1,8 +1,11 @@
 function [] = PlotMesh(traversableTriIndices, wallTriIndices, ...
-    triangles, points, triangleSlopes)
+    triangles, points, triangleSlopes, maxHeight)
 %PLOTMESH Plots the environment mesh
 %   Plots the map of the environment, with walls in red and traversable
 %   areas in green through yellow based on slope (if given)
+%   
+%   maxHeight can be used to avoid drawing triangles above a certain
+%   height, e.g. so the ceiling doesn't obstruct the view of the floor
 
 %Validate the inputs
 if size(points, 1) <= 0
@@ -22,6 +25,14 @@ if size(triangles, 2) ~= 3
     return;
 end
 
+if nargin >= 6    
+    %Prefilter the traversable triangles to ignore any that are too high up
+    traversableTriIndices = traversableTriIndices( ...
+        points(triangles(traversableTriIndices(:),1),3) < maxHeight ...
+        | points(triangles(traversableTriIndices(:),2),3) < maxHeight ...
+        | points(triangles(traversableTriIndices(:),3),3) < maxHeight);
+end
+
 
 savedhold = ishold;
 
@@ -36,7 +47,7 @@ map = [naughtToOne', ones(101, 1), zeros(101, 1)];
 colormap(map);
 caxis([0 1]);
     
-if nargin >= 5
+if nargin >= 5 && size(triangleSlopes, 1) == size(triangles, 1)
     c = [ triangleSlopes; 1];
 else
     c = zeros(size(triangles, 1), 1);

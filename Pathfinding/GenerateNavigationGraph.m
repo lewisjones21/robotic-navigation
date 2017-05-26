@@ -1,13 +1,15 @@
 function [ waypoints, edges, waypointTriIndices ] ...
     = GenerateNavigationGraph(traversableTriIndices, triangles, points, ...
-        travSharedSides, spacingFactor)
+        travSharedSides, spacingFactor, maxHeight)
 %GENERATENAVIGATIONGRAPH Places waypoints on the triangles in relevant places
 %	Places waypoints across the mesh defined by the triangles such that they
 %	cover the traversable area to a suitable spatial resolution. Also
 %	defines traversable edges between the waypoints.
 %	spacingFactor indicates how long a travSharedSide must be for more
-%	than one waypoint to be placed on it
-
+%	than one waypoint to be placed on it.
+%	maxHeight indicates the z coordinate that traversable triangles must be
+%	at least partially below in order to have waypoints placed on them.
+%   
 %	waypoints is a list of (X, Y, Z) coordinate triplets
 %	edges is a list of (W1, W2) pairs indexing waypoints
 %	waypointTriIndices is a list of (T1, T2) pairs indexing triangles
@@ -45,6 +47,18 @@ if size(traversableTriIndices, 2) ~= 1
     return;
 end
 
+if nargin >= 6
+    %Ignore any travSharedSides between triangles that are too high up
+    travSharedSides = travSharedSides( ...
+        points(travSharedSides(:,1),3) < maxHeight ...
+        | points(travSharedSides(:,2),3) < maxHeight,:);
+    
+    %Prefilter the traversable triangles to ignore any that are too high up
+    traversableTriIndices = traversableTriIndices( ...
+        points(triangles(traversableTriIndices(:),1),3) < maxHeight ...
+        | points(triangles(traversableTriIndices(:),2),3) < maxHeight ...
+        | points(triangles(traversableTriIndices(:),3),3) < maxHeight);
+end
 
 traversableTriangles = triangles(traversableTriIndices,:);
 
@@ -63,8 +77,9 @@ waypoints = [points(traversableTriangles(:,1),1) ...
 %For these triangles:
 %[first triangle, second triangle]
 %               = [incremental indices, -1 (no triangle)]
-waypointTriIndices = [traversableTriIndices(cumsum(ones(size(traversableTriangles, 1), 1))), ...
-                    -1 * ones(size(traversableTriangles, 1), 1)];
+waypointTriIndices ...
+    = [traversableTriIndices(cumsum(ones(size(traversableTriangles, 1), 1))), ...
+            -1 * ones(size(traversableTriangles, 1), 1)];
 
 edges = [];%This can only be accurately populated if sharedSides is given
 
