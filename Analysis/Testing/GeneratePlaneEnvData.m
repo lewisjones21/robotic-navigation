@@ -28,27 +28,27 @@ points = [];
 
 %Back Wall
 points = [points; GenerateQuadrilateralPoints([left, back, bottom], ...
-    [width, 0, 0], [0, 0, height], xDensity * 0.5, zDensity)];
+    [width, 0, 0], [0, 0, height], xDensity, zDensity)];
 
 %Front Wall
 points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
-    [width, 0, 0], [0, 0, height], xDensity * 0.5, zDensity)];
+    [width, 0, 0], [0, 0, height], xDensity, zDensity)];
 
 %Left Wall
 points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
-    [0, depth, 0], [0, 0, height], xDensity * 0.5, zDensity)];
+    [0, depth, 0], [0, 0, height], yDensity, zDensity)];
 
 %Right Wall
 points = [points; GenerateQuadrilateralPoints([right, front, bottom], ...
-    [0, depth, 0], [0, 0, height], xDensity * 0.5, zDensity)];
+    [0, depth, 0], [0, 0, height], yDensity, zDensity)];
 
 %Floor
 points = [points; GenerateQuadrilateralPoints([left, front, bottom], ...
     [width, 0, 0], [0, depth, 0], xDensity, yDensity)];
 
 %Ceiling
-% points = [points; GenerateQuadrilateralPoints([left, front, top], ...
-%     [width, 0, 0], [0, depth, 0], xDensity * 0.25, yDensity * 0.25)];
+points = [points; GenerateQuadrilateralPoints([left, front, top], ...
+    [width, 0, 0], [0, depth, 0], xDensity, yDensity)];
 
 points = uniquetol(points, proximityTolerance, 'ByRows', true);
 
