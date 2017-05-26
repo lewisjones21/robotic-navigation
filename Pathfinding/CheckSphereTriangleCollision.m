@@ -1,7 +1,10 @@
-function [ intersects ] = CheckSphereTriangleCollision( trianglePoints, centre, radius )
+function [ intersects ] ...
+    = CheckSphereTriangleCollision( trianglePoints, centre, radius )
 %CHECKSPHERETRIANGLECOLLISION Determines whether the sphere intersects the
 %triangle
-%   
+%   trianglePoints is given as 3 rows of 3 vertex coordinates
+%   centre notes the centre of the sphere
+%   radius is the radius of the sphere
 
 %Validate the inputs
 if size(centre, 2) ~= 3

@@ -131,8 +131,8 @@ Points = Points(Points(:,2) < Front, :);
 Points = Points(Points(:,3) > Bottom, :);
 Points = Points(Points(:,3) < Top, :);
 
-%Remove a proportiong of the points to decrease mesh triangulation time
-Points = Points(1:32:size(Points,1),:);%DecimatePoints(Points, 0.8);
+%Remove a proportion of the points to decrease mesh triangulation time
+Points = Points(1:64:size(Points,1),:);%DecimatePoints(Points, 0.8);
 
 %Create a map from the test data, passing in the generated mesh
 [Triangles, Points, TraversableTriIndices, WallTriIndices, ...
