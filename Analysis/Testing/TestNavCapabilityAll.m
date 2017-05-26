@@ -18,10 +18,10 @@ FileName = tempname;
 switch TestType
     case 1
         %Test each environment against a range of noise values
-        NoiseValues = [0:0.01:0.05, 0.1:0.1:0.4]';
+        NoiseValues = [0:0.01:0.05, 0.1:0.1:0.4];
         NumNoiseValues = length(NoiseValues);
-        Results = [ NoiseValues, zeros(NumNoiseValues, 4) ];
-        TimeResults = [ NoiseValues, zeros(NumNoiseValues, 4) ];
+        Results = [ NoiseValues', zeros(NumNoiseValues, 4) ];
+        TimeResults = [ NoiseValues', zeros(NumNoiseValues, 4) ];
         for environment = 1:4
             [SuccessRates, AvgTimesTaken, ~, ~, ~] ...
                 = TestNavCapability(1, environment, 10, NoiseValues);
@@ -35,10 +35,10 @@ switch TestType
         
     case 2
         %Test each environment against a range of noise values
-        PointDecValues = [1:-0.1:0.1]';
+        PointDecValues = [1:-0.1:0.1];
         NumPointDecValues = length(PointDecValues);
-        Results = [ PointDecValues, zeros(NumPointDecValues, 4) ];
-        TimeResults = [ PointDecValues, zeros(NumPointDecValues, 4) ];
+        Results = [ PointDecValues', zeros(NumPointDecValues, 4) ];
+        TimeResults = [ PointDecValues', zeros(NumPointDecValues, 4) ];
         for environment = 1:4
             [SuccessRates, AvgTimesTaken, ~, ~, ~] ...
                 = TestNavCapability(2, environment, 10, PointDecValues);
@@ -52,10 +52,10 @@ switch TestType
         
     case 3
         %Test each environment against a range of noise values
-        MeshDecValues = [1:-0.1:0.1]';
+        MeshDecValues = [1:-0.1:0.1];
         NumMeshDecValues = length(MeshDecValues);
-        Results = [ MeshDecValues, zeros(NumMeshDecValues, 4) ];
-        TimeResults = [ PointDecValues, zeros(NumMeshDecValues, 4) ];
+        Results = [ MeshDecValues', zeros(NumMeshDecValues, 4) ];
+        TimeResults = [ MeshDecValues', zeros(NumMeshDecValues, 4) ];
         for environment = 1:4
             [SuccessRates, AvgTimesTaken, ~, ~, ~] ...
                 = TestNavCapability(3, environment, 10, MeshDecValues);
