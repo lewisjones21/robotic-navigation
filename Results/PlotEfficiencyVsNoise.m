@@ -1,26 +1,26 @@
 
 
 figure(104);
-
-set(gca, 'ColorOrder', [0 0 0; 0 0 1], 'NextPlot', 'replacechildren');
+hold off;
 
 yyaxis left
-plot(NoiseN, AvgExcessFractionN * 100, 'Color', 'black');
+plot(NoiseN, AvgExcessFractionN * 100, 'Color', 'black', 'LineWidth', 1.2);
 
 ylabel('Average Excess Path Length (compared to optimum, %)')
-ylim([ round(100 * min(AvgExcessFractionN, [], 2) / 5) * 5 - 5 ...
-        round(100 * max(AvgExcessFractionN, [], 2) / 5) * 5 ])
+ylim([ floor(100 * min(AvgExcessFractionN, [], 2) / 5) * 5 - 5 ...
+        ceil(100 * max(AvgExcessFractionN, [], 2) / 5) * 5 ])
 
 yyaxis right
-h = plot(NoiseN, AvgTimesTakenN, '--', 'Color', 'blue');
+plot(NoiseN, AvgTimesTakenN, '--', 'Color', 'blue');
 
 ylabel('Average Time Taken (to interpret and navigate, s)')
-ylim([ 0, round(max(AvgTimesTakenN, [], 2) / 1) * 1 + 0.5 ])
+ylim([ 0, ceil(max(AvgTimesTakenN, [], 2) / 0.5) * 0.5 ])
 set(gca,'ycolor','blue')
 
 xlabel('Noise (standard deviation, metres)')
 title('Path Efficiency vs. Noise Applied to Point Locations')
 xlim([ -0.01, max(NoiseN, [], 2) ])
+set(gca,'XDir','Normal')
 grid on
 
 legend('Average Excess Path Length', 'Average Time Taken', 'Location', 'south')
