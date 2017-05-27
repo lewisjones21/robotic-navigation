@@ -123,19 +123,19 @@ for iteration = 1:NumIterations
     %graph for it
     ThisGenTimeTaken = cputime - startTime;
     
-    %Debug
-    if iteration == 1
-        %Plot the mesh
-        hold off;
-        PlotMesh(TraversableTriIndices, WallTriIndices, ...
-            Triangles, Points, [], MaxHeight);
-        hold on;
-        PlotEdges(Edges, Waypoints, 'black');
-        PlotWaypoints(Waypoints, 'white', false);
-        PlotNodes(ABCoords(:,1:3), 'blue');
-        PlotNodes(ABCoords(:,4:6), 'magenta');
-        view([-0,90])
-    end
+%     %Debug
+%     if iteration == 1
+%         %Plot the mesh
+%         hold off;
+%         PlotMesh(TraversableTriIndices, WallTriIndices, ...
+%             Triangles, Points, [], MaxHeight);
+%         hold on;
+%         PlotEdges(Edges, Waypoints, 'black');
+%         PlotWaypoints(Waypoints, 'white', false);
+%         PlotNodes(ABCoords(:,1:3), 'blue');
+%         PlotNodes(ABCoords(:,4:6), 'magenta');
+%         view([-0,90])
+%     end
     
     for pointPair = 1:size(ABCoords,1)
 
@@ -153,9 +153,9 @@ for iteration = 1:NumIterations
         %Only the Plane environment is used, so any path is a valid path
         if size(PathWaypointIndices, 1) > 1
         
-            %Debug
-            PlotPath(Waypoints(PathWaypointIndices,:), ...
-                'yellow', true, true)
+%             %Debug
+%             PlotPath(Waypoints(PathWaypointIndices,:), ...
+%                 'yellow', true, true)
             
             %Calculate the excess path length
             [~, ~, FactorAboveDirect] ...
