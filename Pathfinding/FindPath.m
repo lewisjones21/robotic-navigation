@@ -92,7 +92,7 @@ end
 %the horizontal plane
 coordErrors = [ coordErrors; ...
         sqrt(sum((waypoints(targetWaypointIndex,1:2) ...
-            - startCoords(1:2)).^2)) ];
+            - targetCoords(1:2)).^2)) ];
 
 %Precalculate the lengths of all edges
 edgeLengths = zeros(size(edges, 1), 1);

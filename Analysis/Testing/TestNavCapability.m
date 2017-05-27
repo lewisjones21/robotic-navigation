@@ -4,8 +4,8 @@ function [ SuccessRates, AvgTimesTaken, ...
 %TESTNAVCAPABILITY Test system navigation capability
 %   Runs a series of tests with varying noise or varying point or mesh
 %   decimation and returns the success rate with which a path is found, and
-%   the average time taken to create and mesh and navigate it, for each
-%   value of the varying parameter
+%   the average time taken to create a mesh and navigate it, for each value
+%   of the varying parameter
 %   
 %   TestType - 1: Noise, 2: Point Decimation, 3: Mesh Decimation
 %   
@@ -23,7 +23,7 @@ MaxSideLength = 2;
 MinObstacleHeight = 0.03;
 MaxHeight = 2;
 MaxIncline = 40;
-CollisionRadius = 0.2; CollisionSafetyFactor = 1.8;
+CollisionRadius = 0.2; CollisionSafetyFactor = 2;
 WheelSpan = 0.2;
 SpacingFactor = 0.6;
 
@@ -81,7 +81,10 @@ end
 
 % %Debug
 % hold off;
+% PlotPlane();
+% PlotMounds();
 % PlotCorridor();
+% PlotRamp();
 % hold on;
 % PlotNodes(ABCoords(:,1:3), 'blue', true)
 % PlotNodes(ABCoords(:,4:6), 'magenta', true)
@@ -95,8 +98,8 @@ end
 % hold off;
 
 %Cycle through the variables and output each value
-%Note that the switch statement above ensures only one of these is actually
-%varying in any one test
+%Note that the switch statement above ensures only one of these parameters
+%is actually varying in any one test
 for n = 1:size(Noise,2)
     Noise(n)
 for p = 1:size(PointDecimationFraction,2)
@@ -173,7 +176,7 @@ for iteration = 1:NumIterations
 
         %Path waypoint indices are only generated if a path is found
         %between the requested start and end points
-        if size(PathWaypointIndices, 1) > 0
+        if size(PathWaypointIndices, 1) > 1
         
 %             %Debug
 %             PlotPath(Waypoints(PathWaypointIndices,:), ...
