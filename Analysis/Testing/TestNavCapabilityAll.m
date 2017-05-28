@@ -16,7 +16,7 @@ function [ Results, TimeResults, FileName ] ...
 FileName = tempname;
 
 if nargin < 2
-    NumIterations = 10;
+    NumIterations = 30;
 end
 
 switch TestType
@@ -38,7 +38,8 @@ switch TestType
         save(strcat(FileName, ' Noise Time Results'), 'TimeResults');
         
     case 2
-        %Test each environment against a range of noise values
+        %Test each environment against a range of point decimation
+        %fractions
         PointDecValues = [1:-0.1:0.1];
         NumPointDecValues = length(PointDecValues);
         Results = [ PointDecValues', zeros(NumPointDecValues, 4) ];
@@ -55,7 +56,7 @@ switch TestType
         save(strcat(FileName, ' Point Dec Time Results'), 'TimeResults');
         
     case 3
-        %Test each environment against a range of noise values
+        %Test each environment against a range of mesh decimation fractions
         MeshDecValues = [1 0.3 0.2 0.15 0.1 0.05];
         NumMeshDecValues = length(MeshDecValues);
         Results = [ MeshDecValues', zeros(NumMeshDecValues, 4) ];
