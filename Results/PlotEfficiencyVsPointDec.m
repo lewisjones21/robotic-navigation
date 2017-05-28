@@ -3,11 +3,12 @@
 figure(104);
 
 yyaxis left
-plot(PointDecPD, AvgExcessFractionPD * 100, 'Color', 'black');
+plot(PointDecPD, AvgExcessFractionPD * 100, 'Color', 'black', 'LineWidth', 1.2);
 
 ylabel('Average Excess Path Length (compared to optimum, %)')
-ylim([ floor(100 * min(AvgExcessFractionPD, [], 2) / 5) * 5 ...
-        ceil(100 * max(AvgExcessFractionPD, [], 2) / 5) * 5 ])
+% ylim([ floor(100 * min(AvgExcessFractionPD, [], 2) / 5) * 5 ...
+%         ceil(100 * max(AvgExcessFractionPD, [], 2) / 5) * 5 ])
+ylim([ 0, 30 ])
 
 yyaxis right
 plot(PointDecPD, AvgTimesTakenPD, '--', 'Color', 'blue');

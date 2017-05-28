@@ -7,8 +7,9 @@ yyaxis left
 plot(NoiseN, AvgExcessFractionN * 100, 'Color', 'black', 'LineWidth', 1.2);
 
 ylabel('Average Excess Path Length (compared to optimum, %)')
-ylim([ floor(100 * min(AvgExcessFractionN, [], 2) / 5) * 5 - 5 ...
-        ceil(100 * max(AvgExcessFractionN, [], 2) / 5) * 5 ])
+% ylim([ floor(100 * min(AvgExcessFractionN, [], 2) / 5) * 5 - 5 ...
+%         ceil(100 * max(AvgExcessFractionN, [], 2) / 5) * 5 ])
+ylim([ 0, 30 ])
 
 yyaxis right
 plot(NoiseN, AvgTimesTakenN, '--', 'Color', 'blue');
